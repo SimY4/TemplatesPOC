@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html ng-app="templates" ng-strict-di>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Template POC</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.5.0/codemirror.min.css" rel="stylesheet" media="screen">
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: red;
+            cursor: inherit;
+            display: block;
+        }
+
+        .CodeMirror {
+            height: auto;
+        }
+    </style>
+</head>
+<body ng-controller="TemplatesController">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6" ng-show="alerts.length">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.msg}}</alert>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+            <form name="upload">
+                <div class="form-group">
+                    <label for="templateUpload">Upload template: </label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-primary btn-file">
+                                Browse&hellip; <input type="file" id="templateUpload"
+                                                      onchange="angular.element(upload).scope().uploadTemplate(this.files)">
+                            </span>
+                        </span>
+                        <input type="text" class="form-control" value="{{templateFileName}}" readonly>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    <div class="row">
+        <div class="col-sm-5">
+            <form>
+                <div class="form-group">
+                    <label for="uploadedTemplate">Uploaded template: </label>
+                    <textarea id="uploadedTemplate" class="form-control" rows="50" style="width: 100%"></textarea>
+                </div>
+            </form>
+        </div><!-- /.col -->
+        <div class="col-sm-2">
+            <form>
+                <div class="form-group" ng-repeat="param in context">
+                    <label for="{{param.paramName}}">{{param.paramName}}: </label>
+                    <div class="input-group">
+                        <input type="text" id="{{param.paramName}}" class="form-control"
+                               ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }"
+                               ng-model="param.paramValue" ng-change="convert(context)" placeholder="Parameter value">
+                        <span class="input-group-btn">
+                            <span class="btn btn-danger" ng-click="removeParameter(param)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="parameters.length > 0">
+                    <label for="parameterPicker">Parameter: </label>
+                    <select id="parameterPicker" class="form-control" ng-model="selectedParameter">
+                        <option ng-repeat="parameter in parameters">{{parameter}}</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" ng-click="addParameter(selectedParameter)"
+                        ng-show="parameters.length > 0">Add</button>
+            </form>
+        </div><!-- /.col -->
+        <div class="col-sm-5">
+            <form>
+                <div class="form-group">
+                    <label for="convertedResult">Converted result: </label>
+                    <textarea id="convertedResult" class="form-control" rows="50" style="width: 100%"></textarea>
+                </div>
+            </form>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-resource.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.5.0/codemirror.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.5.0/mode/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.5.0/mode/xml/xml.min.js"></script>
+<script type="text/javascript" src="/javascripts/app.js"></script>
+<script type="text/javascript" src="/javascripts/controllers/TemplatesController.js"></script>
+<script type="text/javascript" src="/javascripts/services/TemplatesService.js"></script>
+</body>
+</html>

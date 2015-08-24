@@ -1,9 +1,11 @@
 package github.velocity.poc.controllers;
 
-import github.velocity.poc.model.Template;
-import github.velocity.poc.velocity.TemplateDetailsFactory;
+import github.velocity.poc.model.TemplateTO;
+import github.velocity.poc.velocity.TemplateTool;
+import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResource;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
@@ -17,6 +19,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/templates")
@@ -25,23 +28,24 @@ public class TemplatesController {
     private static final String TEMPLATE_NAME = "template";
 
     private final VelocityEngine velocityEngine;
-    private final TemplateDetailsFactory templateDetailsFactory;
+    private final TemplateTool templateTool;
 
     @Resource
     private Map<String, Object> commonTemplateContext;
 
     @Autowired
-    public TemplatesController(VelocityEngine velocityEngine, TemplateDetailsFactory templateDetailsFactory) {
+    public TemplatesController(VelocityEngine velocityEngine, TemplateTool templateTool) {
         this.velocityEngine = velocityEngine;
-        this.templateDetailsFactory = templateDetailsFactory;
+        this.templateTool = templateTool;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Template getTemplate() {
+    public TemplateTO getTemplate() {
         StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
         StringResource templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
-        return templateResource == null ? Template.EMPTY_TEMPLATE :
-                templateDetailsFactory.createTemplateDetails(templateResource.getBody());
+        Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
+        Set<String> parameters = templateTool.referenceList(template);
+        return new TemplateTO(templateResource.getBody(), parameters);
     }
 
     @RequestMapping(value = "upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -64,7 +68,11 @@ public class TemplatesController {
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleFileUploadFailure() {
+    public void handleFileUploadFailure() { }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public TemplateTO handleAbsentTemplate() {
+        return TemplateTO.EMPTY_TEMPLATE;
     }
 
 }

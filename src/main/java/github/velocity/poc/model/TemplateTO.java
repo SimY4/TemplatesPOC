@@ -3,14 +3,14 @@ package github.velocity.poc.model;
 import java.util.Collections;
 import java.util.Set;
 
-public class Template {
+public class TemplateTO {
 
-    public static final Template EMPTY_TEMPLATE = new Template("", Collections.<String>emptySet());
+    public static final TemplateTO EMPTY_TEMPLATE = new TemplateTO("", Collections.<String>emptySet());
 
     private final String template;
     private final Set<String> parameters;
 
-    public Template(String template, Set<String> parameters) {
+    public TemplateTO(String template, Set<String> parameters) {
         this.template = template;
         this.parameters = parameters;
     }

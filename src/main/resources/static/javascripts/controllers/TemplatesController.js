@@ -5,7 +5,6 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
     $scope.templateFileName = '';
     $scope.uploadedTemplate = CodeMirror.fromTextArea(document.getElementById("uploadedTemplate"), {
         mode: 'velocity',
-        lineNumbers: true,
         lineWrapping: true,
         readOnly: true,
         viewportMargin: Infinity

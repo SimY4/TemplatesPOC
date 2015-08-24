@@ -87,14 +87,16 @@
                         </span>
                     </div>
                 </div>
-                <div class="form-group" ng-show="parameters.length > 0">
-                    <label for="parameterPicker">Parameter: </label>
-                    <select id="parameterPicker" class="form-control" ng-model="selectedParameter">
-                        <option ng-repeat="parameter in parameters">{{parameter}}</option>
-                    </select>
+                <div ng-show="parameters.length > 0">
+                    <div class="form-group">
+                        <label for="parameterPicker">Parameter: </label>
+                        <select id="parameterPicker" class="form-control" ng-model="selectedParameter">
+                            <option ng-repeat="parameter in parameters">{{parameter}}</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="addParameter(selectedParameter)">Add</button>
                 </div>
-                <button type="button" class="btn btn-primary" ng-click="addParameter(selectedParameter)"
-                        ng-show="parameters.length > 0">Add</button>
+                <div ng-show="parameters.length == 0">No parameters in template</div>
             </form>
         </div><!-- /.col -->
         <div class="col-sm-5">

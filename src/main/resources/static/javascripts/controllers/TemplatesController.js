@@ -10,6 +10,9 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
         readOnly: true,
         viewportMargin: Infinity
     });
+    $scope.uploadedTemplate.on("changes", function () {
+        $scope.convert($scope.context)
+    });
 
     $scope.convertedResult = CodeMirror.fromTextArea(document.getElementById("convertedResult"), {
         mode: 'xml',
@@ -23,17 +26,22 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
     $scope.context = [];
 
     $scope.addParameter = function (parameter) {
+        var paramIndex = $scope.parameters.indexOf(parameter);
+        if (paramIndex > -1) {
+            $scope.parameters.splice(paramIndex, 1)
+        }
         $scope.context.push({
             paramName: parameter,
             paramValue: ''
-        })
+        });
     };
 
     $scope.removeParameter = function (parameter) {
         var paramIndex = $scope.context.indexOf(parameter);
         if (paramIndex > -1) {
-            context.slice(paramIndex, 1)
+            $scope.context.splice(paramIndex, 1)
         }
+        $scope.parameters.push(parameter.paramName);
     };
 
     $scope.uploadTemplate = function (files) {
@@ -56,8 +64,8 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
 
     function updateTemplate() {
         templatesService.get().$promise.then(function (templateDetails) {
-            $scope.uploadedTemplate.setValue(templateDetails.template);
             $scope.parameters = templateDetails.parameters;
+            $scope.uploadedTemplate.setValue(templateDetails.template);
         });
     }
 

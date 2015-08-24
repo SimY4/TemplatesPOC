@@ -1,4 +1,4 @@
-package com.db.gmld.poc.templates.model;
+package github.velocity.poc.model;
 
 import java.util.Collections;
 import java.util.Set;

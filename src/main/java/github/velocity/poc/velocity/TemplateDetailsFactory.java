@@ -1,6 +1,6 @@
-package com.db.gmld.poc.templates.velocity;
+package github.velocity.poc.velocity;
 
-import com.db.gmld.poc.templates.model.Template;
+import github.velocity.poc.model.Template;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,7 +1,7 @@
-package com.db.gmld.poc.templates.controllers;
+package github.velocity.poc.controllers;
 
-import com.db.gmld.poc.templates.model.Template;
-import com.db.gmld.poc.templates.velocity.TemplateDetailsFactory;
+import github.velocity.poc.model.Template;
+import github.velocity.poc.velocity.TemplateDetailsFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;

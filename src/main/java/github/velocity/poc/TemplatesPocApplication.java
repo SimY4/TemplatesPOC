@@ -1,4 +1,4 @@
-package com.db.gmld.poc.templates;
+package github.velocity.poc;
 
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;

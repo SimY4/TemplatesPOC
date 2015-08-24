@@ -1,4 +1,4 @@
-package com.db.gmld.poc.templates;
+package github.velocity.poc;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

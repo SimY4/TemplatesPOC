@@ -8,13 +8,6 @@ services.factory('templatesService', ['$resource', function ($resource) {
             withCredentials: true,
             headers: {'Content-Type': undefined},
             transformRequest: angular.identity
-        },
-        convert: {
-            method: 'POST',
-            params: {action: 'convert'},
-            transformResponse: function (data) {
-                return {content: data};
-            }
         }
     });
 }]);

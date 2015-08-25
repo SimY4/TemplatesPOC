@@ -6,11 +6,10 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
     $scope.uploadedTemplate = CodeMirror.fromTextArea(document.getElementById("uploadedTemplate"), {
         mode: 'velocity',
         lineWrapping: true,
-        readOnly: true,
         viewportMargin: Infinity
     });
-    $scope.uploadedTemplate.on("changes", function () {
-        $scope.convert($scope.context)
+    $scope.uploadedTemplate.on("changes", function (instance) {
+        $scope.convert($scope.context, instance.getValue())
     });
 
     $scope.convertedResult = CodeMirror.fromTextArea(document.getElementById("convertedResult"), {
@@ -33,6 +32,7 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
             paramName: parameter,
             paramValue: ''
         });
+        $scope.convert($scope.context)
     };
 
     $scope.removeParameter = function (parameter) {
@@ -41,33 +41,50 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
             $scope.context.splice(paramIndex, 1)
         }
         $scope.parameters.push(parameter.paramName);
+        $scope.convert($scope.context)
     };
 
     $scope.uploadTemplate = function (files) {
         $scope.templateFileName = files[0].name;
         var fd = new FormData();
         fd.append("template", files[0]);
-        templatesService.upload(fd).$promise.then(updateTemplate);
+        templatesService.upload(fd).$promise.then(function(templateDetails) {
+            updateTemplate($scope.uploadedTemplate, templateDetails)
+        });
     };
 
-    $scope.convert = function (parameters) {
-        var context = {};
+    $scope.convert = function (parameters, template) {
+        var request;
+        if (angular.isDefined(template)) {
+            request = { '__template__' : template };
+        } else {
+            request = {};
+        }
         for (var i = 0; i < parameters.length; i++) {
             var parameter = parameters[i];
-            context[parameter.paramName] = parameter.paramValue;
+            request[parameter.paramName] = parameter.paramValue;
         }
-        templatesService.convert(context).$promise.then(function (response) {
-            $scope.convertedResult.setValue(response.content);
+        templatesService.save(request).$promise.then(function(templateDetails) {
+            updateTemplate($scope.convertedResult, templateDetails)
         });
     };
 
-    function updateTemplate() {
-        templatesService.get().$promise.then(function (templateDetails) {
-            $scope.parameters = templateDetails.parameters;
-            $scope.uploadedTemplate.setValue(templateDetails.template);
+    function updateTemplate(editorInstance, templateDetails) {
+        $scope.context = $scope.context.filter(function(i) {
+            return templateDetails.parameters.indexOf(i.paramName) > -1
         });
-    }
+        $scope.parameters = $scope.parameters.filter(function(i) {
+            return templateDetails.parameters.indexOf(i) > -1
+        });
+        for (var i = 0; i < templateDetails.parameters.length; i++) {
+            const parameter = templateDetails.parameters[i];
+            if ($scope.parameters.indexOf(parameter) > -1) continue;
 
-    updateTemplate();
+            if (!$scope.context.find(function(i) { return i.paramName == parameter })) {
+                $scope.parameters.push(parameter);
+            }
+        }
+        editorInstance.setValue(templateDetails.template);
+    }
 
 }]);

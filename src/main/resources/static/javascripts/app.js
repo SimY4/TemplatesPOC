@@ -5,7 +5,7 @@ var templates = angular.module('templates', ['ui.bootstrap', 'templates.services
 
         /* Register request error interceptor that shows alerts on UI or
          redirects to login page on unauthenticated requests */
-        $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
+        $httpProvider.interceptors.push(['$q', '$rootScope', '$log', function ($q, $rootScope, $log) {
             return {
                 'responseError': function (rejection) {
                     var status = rejection.status;
@@ -15,6 +15,8 @@ var templates = angular.module('templates', ['ui.bootstrap', 'templates.services
 
                     if (!status) {
                         $rootScope.addAlert('danger', 'Server maintenance is currently taking place. Please stand by');
+                    }else if (status == 400) {
+                        $log.warn('Template is invalid')
                     } else {
                         $rootScope.addAlert('danger', method + ' on ' + url + ' failed with status ' + status);
                     }

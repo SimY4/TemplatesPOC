@@ -1,16 +1,15 @@
 'use strict';
 
-templates.controller('TemplatesController', ['$scope', 'templatesService', function ($scope, templatesService) {
+templates.controller('TemplatesController', ['$scope', '$interval', 'templatesService', function ($scope, $interval, templatesService) {
 
-    $scope.templateFileName = '';
+    var changed = false;
+
     $scope.uploadedTemplate = CodeMirror.fromTextArea(document.getElementById("uploadedTemplate"), {
         mode: 'velocity',
         lineWrapping: true,
         viewportMargin: Infinity
     });
-    $scope.uploadedTemplate.on("changes", function (instance) {
-        $scope.convert($scope.context, instance.getValue())
-    });
+    $scope.uploadedTemplate.on("changes", function () { changed = true; });
 
     $scope.convertedResult = CodeMirror.fromTextArea(document.getElementById("convertedResult"), {
         mode: 'xml',
@@ -19,7 +18,6 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
         viewportMargin: Infinity
     });
 
-    $scope.templateDetails = {};
     $scope.parameters = [];
     $scope.context = [];
 
@@ -69,6 +67,13 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
         });
     };
 
+    $interval(function() {
+        if (changed) {
+            $scope.convert($scope.context, $scope.uploadedTemplate.getValue());
+            changed = false;
+        }
+    }, 500);
+
     function updateTemplate(editorInstance, templateDetails) {
         $scope.context = $scope.context.filter(function(i) {
             return templateDetails.parameters.indexOf(i.paramName) > -1
@@ -80,7 +85,11 @@ templates.controller('TemplatesController', ['$scope', 'templatesService', funct
             const parameter = templateDetails.parameters[i];
             if ($scope.parameters.indexOf(parameter) > -1) continue;
 
-            if (!$scope.context.find(function(i) { return i.paramName == parameter })) {
+            var found = false;
+            for (var j = 0; j < $scope.context.length; j++) {
+                found |= $scope.context[i].paramName == parameter;
+            }
+            if (!found) {
                 $scope.parameters.push(parameter);
             }
         }

@@ -1,5 +1,7 @@
 package github.velocity.poc;
 
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.Parser;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
@@ -19,6 +21,11 @@ public class TemplatesPocApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TemplatesPocApplication.class, args);
+    }
+
+    @Bean
+    public Parser getAutoDetectParser() {
+        return new AutoDetectParser();
     }
 
     @Bean(initMethod = "init")

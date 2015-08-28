@@ -1,7 +1,7 @@
 'use strict';
 
-services.factory('templatesService', ['$resource', function ($resource) {
-    return $resource('/templates/:action', {action: '@action'}, {
+services.factory('tikaService', ['$resource', function ($resource) {
+    return $resource('/tika/:action', {action: '@action'}, {
         upload: {
             method: 'POST',
             params: {action: 'upload'},
@@ -9,5 +9,5 @@ services.factory('templatesService', ['$resource', function ($resource) {
             headers: {'Content-Type': undefined},
             transformRequest: angular.identity
         }
-    });
+    })
 }]);

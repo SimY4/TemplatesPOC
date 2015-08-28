@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+        <form name="upload">
+            <div class="form-group">
+                <label for="fileUpload">Upload file: </label>
+                <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-primary btn-file">
+                                Browse&hellip; <input type="file" id="fileUpload"
+                                                      onchange="angular.element(upload).scope().uploadFile(this.files)">
+                            </span>
+                        </span>
+                    <input type="text" class="form-control" value="{{fileName}}" readonly>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+<div class="row">
+    <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+        <form>
+            <div class="form-group">
+                <label for="contents">Converted result: </label>
+                <textarea id="contents" class="form-control" rows="50" style="width: 100%"></textarea>
+            </div>
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->

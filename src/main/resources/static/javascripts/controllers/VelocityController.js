@@ -1,17 +1,17 @@
 'use strict';
 
-templates.controller('TemplatesController', ['$scope', '$interval', 'templatesService', function ($scope, $interval, templatesService) {
+templates.controller('VelocityController', ['$scope', '$interval', 'velocityService', function ($scope, $interval, velocityService) {
 
     var changed = false;
 
-    $scope.uploadedTemplate = CodeMirror.fromTextArea(document.getElementById("uploadedTemplate"), {
+    $scope.template = CodeMirror.fromTextArea(document.getElementById("template"), {
         mode: 'velocity',
         lineWrapping: true,
         viewportMargin: Infinity
     });
-    $scope.uploadedTemplate.on("changes", function () { changed = true; });
+    $scope.template.on("changes", function () { changed = true; });
 
-    $scope.convertedResult = CodeMirror.fromTextArea(document.getElementById("convertedResult"), {
+    $scope.result = CodeMirror.fromTextArea(document.getElementById("result"), {
         mode: 'xml',
         readOnly: true,
         lineWrapping: true,
@@ -42,15 +42,6 @@ templates.controller('TemplatesController', ['$scope', '$interval', 'templatesSe
         $scope.convert($scope.context)
     };
 
-    $scope.uploadTemplate = function (files) {
-        $scope.templateFileName = files[0].name;
-        var fd = new FormData();
-        fd.append("template", files[0]);
-        templatesService.upload(fd).$promise.then(function(templateDetails) {
-            updateTemplate($scope.uploadedTemplate, templateDetails)
-        });
-    };
-
     $scope.convert = function (parameters, template) {
         var request;
         if (angular.isDefined(template)) {
@@ -62,14 +53,14 @@ templates.controller('TemplatesController', ['$scope', '$interval', 'templatesSe
             var parameter = parameters[i];
             request[parameter.paramName] = parameter.paramValue;
         }
-        templatesService.save(request).$promise.then(function(templateDetails) {
-            updateTemplate($scope.convertedResult, templateDetails)
+        velocityService.save(request).$promise.then(function(templateDetails) {
+            updateTemplate($scope.result, templateDetails)
         });
     };
 
     $interval(function() {
         if (changed) {
-            $scope.convert($scope.context, $scope.uploadedTemplate.getValue());
+            $scope.convert($scope.context, $scope.template.getValue());
             changed = false;
         }
     }, 500);

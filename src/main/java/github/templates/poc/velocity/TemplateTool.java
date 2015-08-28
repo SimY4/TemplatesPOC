@@ -12,13 +12,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@Service
+@Service("velocityTemplateTool")
 public class TemplateTool {
 
     @Resource
     private Map<String, Object> commonTemplateContext;
 
-    public Set<String> referenceList(Template template) {
+    public Set<String> referenceSet(Template template) {
         SimpleNode simpleNode = (SimpleNode) template.getData();
         ReferenceNodeVisitor referenceNodeVisitor = new ReferenceNodeVisitor(commonTemplateContext);
         simpleNode.jjtAccept(referenceNodeVisitor, null);

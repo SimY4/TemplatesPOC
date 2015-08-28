@@ -44,7 +44,7 @@ public class VelocityController {
         StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
         StringResource templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
         Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = templateTool.referenceList(template);
+        Set<String> parameters = templateTool.referenceSet(template);
         return new TemplateTO(templateResource.getBody(), parameters, -1L);
     }
 
@@ -56,7 +56,7 @@ public class VelocityController {
             setTemplate(templateText);
         }
         Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = templateTool.referenceList(template);
+        Set<String> parameters = templateTool.referenceSet(template);
         VelocityContext context = new VelocityContext(requestBody);
         for (Map.Entry<String, Object> commonContextItem : commonTemplateContext.entrySet()) {
             context.put(commonContextItem.getKey(), commonContextItem.getValue());

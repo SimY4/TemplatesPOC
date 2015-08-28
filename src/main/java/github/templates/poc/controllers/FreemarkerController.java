@@ -2,21 +2,19 @@ package github.templates.poc.controllers;
 
 import freemarker.cache.StringTemplateLoader;
 import freemarker.core.ParseException;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateNotFoundException;
+import freemarker.template.*;
+import github.templates.poc.freemarker.TemplateTool;
 import github.templates.poc.model.TemplateTO;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/freemarker")
@@ -26,21 +24,21 @@ public class FreemarkerController {
 
     private final StringTemplateLoader stringTemplateLoader;
     private final Configuration freemarkerConfiguration;
+    private final TemplateTool templateTool;
 
     @Autowired
-    public FreemarkerController(StringTemplateLoader stringTemplateLoader, Configuration freemarkerConfiguration) {
+    public FreemarkerController(StringTemplateLoader stringTemplateLoader, Configuration freemarkerConfiguration,
+                                TemplateTool templateTool) {
         this.stringTemplateLoader = stringTemplateLoader;
         this.freemarkerConfiguration = freemarkerConfiguration;
+        this.templateTool = templateTool;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public TemplateTO getTemplate() throws IOException {
+    public TemplateTO getTemplate() throws IOException, TemplateModelException {
         Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = new HashSet<>(Arrays.asList(template.getCustomAttributeNames()));
-        Object templateSource = stringTemplateLoader.findTemplateSource(TEMPLATE_NAME);
-        Reader reader = stringTemplateLoader.getReader(templateSource, "UTF-8");
-        String templateString = IOUtils.toString(reader);
-        return new TemplateTO(templateString, parameters, -1L);
+        Set<String> parameters = templateTool.referenceSet(template);
+        return new TemplateTO(template.toString(), parameters, -1L);
     }
 
     @RequestMapping(method = RequestMethod.POST,
@@ -51,7 +49,7 @@ public class FreemarkerController {
             setTemplate(templateText);
         }
         Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = new HashSet<>(Arrays.asList(template.getCustomAttributeNames()));
+        Set<String> parameters = templateTool.referenceSet(template);
         long conversionTime = System.nanoTime();
         StringWriter writer = new StringWriter();
         template.process(requestBody, writer);

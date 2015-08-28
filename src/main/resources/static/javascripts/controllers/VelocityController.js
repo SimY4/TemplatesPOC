@@ -43,11 +43,9 @@ templates.controller('VelocityController', ['$scope', '$interval', 'velocityServ
     };
 
     $scope.convert = function (parameters, template) {
-        var request;
+        var request = {};
         if (angular.isDefined(template)) {
-            request = { '__template__' : template };
-        } else {
-            request = {};
+            request['__template__'] = template;
         }
         for (var i = 0; i < parameters.length; i++) {
             var parameter = parameters[i];
@@ -64,6 +62,10 @@ templates.controller('VelocityController', ['$scope', '$interval', 'velocityServ
             changed = false;
         }
     }, 500);
+
+    velocityService.get().$promise.then(function(templateDetails) {
+        updateTemplate($scope.template, templateDetails)
+    });
 
     function updateTemplate(editorInstance, templateDetails) {
         $scope.context = $scope.context.filter(function(i) {

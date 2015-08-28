@@ -6,8 +6,13 @@ var templates = angular.module('templates', ['ui.bootstrap', 'ngRoute', 'templat
 
             /* Register view routing */
             $routeProvider.when('/velocity', {
-                controller: 'VelocityController',
-                templateUrl: '/views/velocity.html'
+                controller: 'TemplateController',
+                templateUrl: '/views/template.html',
+                templateService: 'velocityService'
+            }).when('/freemarker', {
+                controller: 'TemplateController',
+                templateUrl: '/views/template.html',
+                templateService: 'freemarkerService'
             }).when('/tika', {
                 controller: 'TikaController',
                 templateUrl: '/views/tika.html'

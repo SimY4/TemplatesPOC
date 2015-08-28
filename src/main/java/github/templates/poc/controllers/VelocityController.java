@@ -61,10 +61,10 @@ public class VelocityController {
         for (Map.Entry<String, Object> commonContextItem : commonTemplateContext.entrySet()) {
             context.put(commonContextItem.getKey(), commonContextItem.getValue());
         }
-        long conversionTime = System.currentTimeMillis();
+        long conversionTime = System.nanoTime();
         StringWriter writer = new StringWriter();
         velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", context, writer);
-        return new TemplateTO(writer.toString(), parameters, System.currentTimeMillis() - conversionTime);
+        return new TemplateTO(writer.toString(), parameters, System.nanoTime() - conversionTime);
     }
 
     private void setTemplate(String template) {

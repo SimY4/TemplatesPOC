@@ -52,10 +52,10 @@ public class FreemarkerController {
         }
         Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = new HashSet<>(Arrays.asList(template.getCustomAttributeNames()));
-        long conversionTime = System.currentTimeMillis();
+        long conversionTime = System.nanoTime();
         StringWriter writer = new StringWriter();
         template.process(requestBody, writer);
-        return new TemplateTO(writer.toString(), parameters, System.currentTimeMillis() - conversionTime);
+        return new TemplateTO(writer.toString(), parameters, System.nanoTime() - conversionTime);
     }
 
     private void setTemplate(String template) {

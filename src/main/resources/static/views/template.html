@@ -2,7 +2,7 @@
     <div class="col-sm-5">
         <form>
             <div class="form-group">
-                <label for="template">Velocity template: </label>
+                <label for="template">Source template: </label>
                 <textarea id="template" class="form-control" rows="50" style="width: 100%"></textarea>
             </div>
         </form>
@@ -39,6 +39,9 @@
             <div class="form-group">
                 <label for="result">Converted result: </label>
                 <textarea id="result" class="form-control" rows="50" style="width: 100%"></textarea>
+            </div>
+            <div class="form-group">
+                <p ng-show="conversionTime > -1">Conversion time: {{conversionTime}}</p>
             </div>
         </form>
     </div><!-- /.col -->

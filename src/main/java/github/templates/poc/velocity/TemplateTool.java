@@ -1,4 +1,4 @@
-package github.velocity.poc.velocity;
+package github.templates.poc.velocity;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.runtime.parser.node.ASTReference;

@@ -1,4 +1,4 @@
-package github.velocity.poc.model;
+package github.templates.poc.model;
 
 public class TikaTO {
 

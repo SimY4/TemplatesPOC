@@ -1,6 +1,6 @@
-package github.velocity.poc.tika;
+package github.templates.poc.tika;
 
-import github.velocity.poc.model.TikaTO;
+import github.templates.poc.model.TikaTO;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;

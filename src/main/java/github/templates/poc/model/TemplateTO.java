@@ -1,18 +1,17 @@
-package github.velocity.poc.model;
+package github.templates.poc.model;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class VelocityTO {
-
-    public static final VelocityTO EMPTY_TEMPLATE = new VelocityTO("", Collections.<String>emptySet());
+public class TemplateTO {
 
     private final String template;
     private final Set<String> parameters;
+    private final long conversionTime;
 
-    public VelocityTO(String template, Set<String> parameters) {
+    public TemplateTO(String template, Set<String> parameters, long conversionTime) {
         this.template = template;
         this.parameters = parameters;
+        this.conversionTime = conversionTime;
     }
 
     public String getTemplate() {
@@ -21,6 +20,10 @@ public class VelocityTO {
 
     public Set<String> getParameters() {
         return parameters;
+    }
+
+    public long getConversionTime() {
+        return conversionTime;
     }
 
 }

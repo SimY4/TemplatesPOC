@@ -1,7 +1,7 @@
-package github.velocity.poc.controllers;
+package github.templates.poc.controllers;
 
-import github.velocity.poc.model.VelocityTO;
-import github.velocity.poc.velocity.TemplateTool;
+import github.templates.poc.model.TemplateTO;
+import github.templates.poc.velocity.TemplateTool;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,17 +40,17 @@ public class VelocityController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public VelocityTO getTemplate() {
+    public TemplateTO getTemplate() {
         StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
         StringResource templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
         Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceList(template);
-        return new VelocityTO(templateResource.getBody(), parameters);
+        return new TemplateTO(templateResource.getBody(), parameters, -1L);
     }
 
     @RequestMapping(method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public VelocityTO updateTemplate(@RequestBody Map<String, String> requestBody) {
+    public TemplateTO updateTemplate(@RequestBody Map<String, String> requestBody) {
         String templateText = requestBody.remove("__template__");
         if (templateText != null) {
             setTemplate(templateText);
@@ -60,9 +61,10 @@ public class VelocityController {
         for (Map.Entry<String, Object> commonContextItem : commonTemplateContext.entrySet()) {
             context.put(commonContextItem.getKey(), commonContextItem.getValue());
         }
+        long conversionTime = System.currentTimeMillis();
         StringWriter writer = new StringWriter();
         velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", context, writer);
-        return new VelocityTO(writer.toString(), parameters);
+        return new TemplateTO(writer.toString(), parameters, System.currentTimeMillis() - conversionTime);
     }
 
     private void setTemplate(String template) {
@@ -71,8 +73,8 @@ public class VelocityController {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public VelocityTO handleAbsentTemplate() {
-        return VelocityTO.EMPTY_TEMPLATE;
+    public TemplateTO handleAbsentTemplate() {
+        return new TemplateTO("", Collections.<String>emptySet(), -1L);
     }
 
     @ExceptionHandler(ParseErrorException.class)

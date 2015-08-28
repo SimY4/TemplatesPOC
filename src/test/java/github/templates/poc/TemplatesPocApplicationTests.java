@@ -1,4 +1,4 @@
-package github.velocity.poc;
+package github.templates.poc;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
-package github.velocity.poc.controllers;
+package github.templates.poc.controllers;
 
-import github.velocity.poc.model.TikaTO;
-import github.velocity.poc.tika.TikaParserService;
+import github.templates.poc.model.TikaTO;
+import github.templates.poc.tika.TikaParserService;
 import org.apache.tika.exception.TikaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -24,14 +24,26 @@ public class TemplateTool {
                 continue;
             }
             Object wrappedObject = ((StringModel) templateModel).getWrappedObject();
-            if ("DollarVariable".equals(wrappedObject.getClass().getSimpleName())) {
-                try {
-                    Object expression = getInternalState(wrappedObject, "expression");
-                    Object lho = getInternalState(expression, "lho");
-                    result.add(lho.toString());
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    throw new TemplateModelException("Unable to reflect template model");
+            if (!"DollarVariable".equals(wrappedObject.getClass().getSimpleName())) {
+                continue;
+            }
+
+            try {
+                Object expression = getInternalState(wrappedObject, "expression");
+                Object variable;
+                switch (expression.getClass().getSimpleName()) {
+                    case "Identifier":
+                        variable = getInternalState(expression, "name");
+                        break;
+                    case "DefaultToExpression":
+                        variable = getInternalState(expression, "lho");
+                        break;
+                    default:
+                        throw new IllegalStateException("Unable to retrospect variable");
                 }
+                result.add(variable.toString());
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new TemplateModelException("Unable to reflect template model");
             }
         }
         return result;

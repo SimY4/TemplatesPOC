@@ -3,19 +3,19 @@ package github.templates.poc.controllers;
 import github.templates.poc.model.TemplateTO;
 import github.templates.poc.velocity.TemplateTool;
 import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResource;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
+import org.apache.velocity.tools.ToolContext;
+import org.apache.velocity.tools.ToolManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Map;
@@ -28,14 +28,13 @@ public class VelocityController {
     private static final String TEMPLATE_NAME = "template";
 
     private final VelocityEngine velocityEngine;
+    private final ToolManager toolManager;
     private final TemplateTool templateTool;
 
-    @Resource
-    private Map<String, Object> commonTemplateContext;
-
     @Autowired
-    public VelocityController(VelocityEngine velocityEngine, TemplateTool templateTool) {
+    public VelocityController(VelocityEngine velocityEngine, ToolManager toolManager, TemplateTool templateTool) {
         this.velocityEngine = velocityEngine;
+        this.toolManager = toolManager;
         this.templateTool = templateTool;
     }
 
@@ -57,13 +56,11 @@ public class VelocityController {
         }
         Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
-        VelocityContext context = new VelocityContext(requestBody);
-        for (Map.Entry<String, Object> commonContextItem : commonTemplateContext.entrySet()) {
-            context.put(commonContextItem.getKey(), commonContextItem.getValue());
-        }
+        ToolContext toolContext = toolManager.createContext();
+        toolContext.putAll(requestBody);
         long conversionTime = System.nanoTime();
         StringWriter writer = new StringWriter();
-        velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", context, writer);
+        velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
         return new TemplateTO(writer.toString(), parameters, System.nanoTime() - conversionTime);
     }
 

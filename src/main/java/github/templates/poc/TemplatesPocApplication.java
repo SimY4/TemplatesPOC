@@ -7,17 +7,13 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.Parser;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.ToolManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.velocity.VelocityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {VelocityAutoConfiguration.class, FreeMarkerAutoConfiguration.class})
@@ -44,12 +40,9 @@ public class TemplatesPocApplication {
         return velocityEngine;
     }
 
-    //TODO use ToolManager for this purpose
-    @Bean(name = "commonTemplateContext")
-    public Map<String, Object> getCommonTemplateContext() {
-        Map<String, Object> commonTemplateContext = new HashMap<>();
-        commonTemplateContext.put("dateTool", new DateTool());
-        return Collections.unmodifiableMap(commonTemplateContext);
+    @Bean
+    public ToolManager getToolManager() {
+        return new ToolManager(true);
     }
 
     // Freemarker template POC dependencies

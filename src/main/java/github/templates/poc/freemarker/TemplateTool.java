@@ -39,7 +39,7 @@ public class TemplateTool {
                         variable = getInternalState(expression, "lho");
                         break;
                     default:
-                        throw new IllegalStateException("Unable to retrospect variable");
+                        throw new IllegalStateException("Unable to introspect variable");
                 }
                 result.add(variable.toString());
             } catch (NoSuchFieldException | IllegalAccessException e) {

@@ -60,21 +60,13 @@ public class FreemarkerController {
         stringTemplateLoader.putTemplate(TEMPLATE_NAME, template);
     }
 
-    @ExceptionHandler(IOException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleTemplateLoadingFailure() { }
-
     @ExceptionHandler(TemplateNotFoundException.class)
     public TemplateTO handleAbsentTemplate() {
         return new TemplateTO("", Collections.<String>emptySet(), -1L);
     }
 
-    @ExceptionHandler(ParseException.class)
+    @ExceptionHandler({ParseException.class, MalformedTemplateNameException.class, TemplateException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleTemplateParseFailure() { }
-
-    @ExceptionHandler(TemplateException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleTemplateConversionFailure() { }
 
 }

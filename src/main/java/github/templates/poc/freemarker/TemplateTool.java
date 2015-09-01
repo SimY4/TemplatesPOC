@@ -30,18 +30,18 @@ public class TemplateTool {
 
             try {
                 Object expression = getInternalState(wrappedObject, "expression");
-                Object variable;
                 switch (expression.getClass().getSimpleName()) {
                     case "Identifier":
-                        variable = getInternalState(expression, "name");
+                        result.add(getInternalState(expression, "name").toString());
                         break;
                     case "DefaultToExpression":
-                        variable = getInternalState(expression, "lho");
+                        result.add(getInternalState(expression, "lho").toString());
+                        break;
+                    case "BuiltinVariable":
                         break;
                     default:
                         throw new IllegalStateException("Unable to introspect variable");
                 }
-                result.add(variable.toString());
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new TemplateModelException("Unable to reflect template model");
             }

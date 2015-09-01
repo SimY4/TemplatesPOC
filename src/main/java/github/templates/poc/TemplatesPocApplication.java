@@ -23,6 +23,8 @@ public class TemplatesPocApplication {
         SpringApplication.run(TemplatesPocApplication.class, args);
     }
 
+    // Apache Tika POC dependencies
+
     @Bean
     public Parser getAutoDetectParser() {
         return new AutoDetectParser();
@@ -57,7 +59,7 @@ public class TemplatesPocApplication {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_22);
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateLoader(templateLoader);
-        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
         return configuration;
     }
 

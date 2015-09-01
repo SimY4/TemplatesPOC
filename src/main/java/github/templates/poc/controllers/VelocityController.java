@@ -4,6 +4,7 @@ import github.templates.poc.model.TemplateTO;
 import github.templates.poc.velocity.TemplateTool;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
@@ -74,7 +75,7 @@ public class VelocityController {
         return new TemplateTO("", Collections.<String>emptySet(), -1L);
     }
 
-    @ExceptionHandler(ParseErrorException.class)
+    @ExceptionHandler({ParseErrorException.class, MethodInvocationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleTemplateParseFailure() { }
 

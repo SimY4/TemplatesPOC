@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class FreemarkerController {
     public TemplateTO getTemplate() throws IOException, TemplateModelException {
         Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
-        return new TemplateTO(template.toString(), parameters, -1L);
+        return new TemplateTO(template.toString(), parameters);
     }
 
     @RequestMapping(method = RequestMethod.POST,
@@ -62,7 +61,7 @@ public class FreemarkerController {
 
     @ExceptionHandler(TemplateNotFoundException.class)
     public TemplateTO handleAbsentTemplate() {
-        return new TemplateTO("", Collections.<String>emptySet(), -1L);
+        return TemplateTO.EMPTY;
     }
 
     @ExceptionHandler({ParseException.class, MalformedTemplateNameException.class, TemplateException.class})

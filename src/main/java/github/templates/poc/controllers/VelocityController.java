@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.StringWriter;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ public class VelocityController {
         StringResource templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
         Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
-        return new TemplateTO(templateResource.getBody(), parameters, -1L);
+        return new TemplateTO(templateResource.getBody(), parameters);
     }
 
     @RequestMapping(method = RequestMethod.POST,
@@ -72,7 +71,7 @@ public class VelocityController {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public TemplateTO handleAbsentTemplate() {
-        return new TemplateTO("", Collections.<String>emptySet(), -1L);
+        return TemplateTO.EMPTY;
     }
 
     @ExceptionHandler({ParseErrorException.class, MethodInvocationException.class})

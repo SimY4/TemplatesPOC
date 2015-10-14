@@ -13,9 +13,6 @@ var templates = angular.module('templates', ['ui.bootstrap', 'ngRoute', 'templat
                 controller: 'TemplateController',
                 templateUrl: '/views/template.html',
                 templateService: 'freemarkerService'
-            }).when('/tika', {
-                controller: 'TikaController',
-                templateUrl: '/views/tika.html'
             }).otherwise({
                 redirectTo: '/'
             });

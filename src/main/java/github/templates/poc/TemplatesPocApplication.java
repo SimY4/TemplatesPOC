@@ -26,6 +26,8 @@ public class TemplatesPocApplication {
     @Bean(initMethod = "init")
     public VelocityEngine getVelocityEngine() {
         VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
+        velocityEngine.setProperty("runtime.log.logsystem.log4j.logger", "github.templates.poc.velocity");
         velocityEngine.setProperty(Velocity.RESOURCE_LOADER, "string");
         velocityEngine.setProperty("string.resource.loader.description", "Velocity StringResource loader");
         velocityEngine.setProperty("string.resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");

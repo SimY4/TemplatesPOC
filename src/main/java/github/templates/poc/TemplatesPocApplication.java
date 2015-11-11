@@ -24,7 +24,7 @@ public class TemplatesPocApplication {
     // Velocity template POC dependencies
 
     @Bean(initMethod = "init")
-    public VelocityEngine getVelocityEngine() {
+    public VelocityEngine velocityEngine() {
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
         velocityEngine.setProperty("runtime.log.logsystem.log4j.logger", "github.templates.poc.velocity");
@@ -36,22 +36,22 @@ public class TemplatesPocApplication {
     }
 
     @Bean
-    public ToolManager getToolManager() {
+    public ToolManager toolManager() {
         return new ToolManager(true);
     }
 
     // Freemarker template POC dependencies
 
     @Bean
-    public StringTemplateLoader getTemplateLoader() {
+    public StringTemplateLoader templateLoader() {
         return new StringTemplateLoader();
     }
 
     @Bean
-    public Configuration getFreemarkerConfiguration(StringTemplateLoader templateLoader) {
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_22);
+    public Configuration freeMarkerConfiguration(StringTemplateLoader templateLoader) {
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
         configuration.setDefaultEncoding("UTF-8");
-        configuration.setTemplateUpdateDelay(0);
+        configuration.setTemplateUpdateDelayMilliseconds(0L);
         configuration.setTemplateLoader(templateLoader);
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
         return configuration;

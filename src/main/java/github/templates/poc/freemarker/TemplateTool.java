@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-@Service("freemarkerTemplateTool")
+@Service("freeMarkerTemplateTool")
 public class TemplateTool {
 
     @SuppressWarnings("deprecation")

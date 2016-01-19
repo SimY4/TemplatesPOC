@@ -40,10 +40,11 @@ public class TemplateTool {
                     case "BuiltinVariable":
                         break;
                     default:
-                        throw new IllegalStateException("Unable to introspect variable");
+                        throw new TemplateModelException("Unable to introspect variable " + expression +
+                                " of type " + expression.getClass());
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new TemplateModelException("Unable to reflect template model");
+                throw new TemplateModelException("Unable to reflect template model", e);
             }
         }
         return result;

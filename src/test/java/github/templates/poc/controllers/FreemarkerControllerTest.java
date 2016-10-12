@@ -46,10 +46,10 @@ public class FreemarkerControllerTest {
     public void testUpdateTemplateDollarVariable() throws Exception {
         mockMvc.perform(post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template ${foo}, ${bar}\"}"))
+                .content("{\"__template__\":\"template ${foo}, ${bar!'bar'}\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.template", is("template , ")))
+                .andExpect(jsonPath("$.template", is("template , bar")))
                 .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
     }
 
@@ -57,7 +57,7 @@ public class FreemarkerControllerTest {
     public void testUpdateTemplateDollarVariableWithParameterValues() throws Exception {
         mockMvc.perform(post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template ${foo}, ${bar}\", \"foo\":\"foo\", \"bar\":\"bar\"}"))
+                .content("{\"__template__\":\"template ${foo}, ${bar!'bar'}\", \"foo\":\"foo\", \"bar\":\"bar\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.template", is("template foo, bar")))

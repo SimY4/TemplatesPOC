@@ -12,6 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -62,6 +63,17 @@ public class VelocityControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.template", is("template foo, bar, foo, bar")))
                 .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
+    }
+
+    @Test
+    public void testUpdateTemplateSet() throws Exception {
+        mockMvc.perform(post("/velocity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"__template__\":\"template #set($foo = 'test')\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.template", is("template ")))
+                .andExpect(jsonPath("$.parameters", empty()));
     }
 
     @Test

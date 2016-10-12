@@ -42,6 +42,7 @@ public class TemplateTool {
                     return Collections.singleton(getInternalState(expression, "name").toString());
                 case "DefaultToExpression":
                     return Collections.singleton(getInternalState(expression, "lho").toString());
+                case "MethodCall":
                 case "BuiltinVariable":
                     return Collections.emptySet();
                 default:

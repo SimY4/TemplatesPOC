@@ -12,9 +12,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -36,16 +39,29 @@ public class FreemarkerControllerTest {
     public void testGetTemplateNoTemplate() throws Exception {
         mockMvc.perform(get("/freemarker"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    public void testUpdateTemplate() throws Exception {
+    public void testUpdateTemplateDollarVariable() throws Exception {
         mockMvc.perform(post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template\"}"))
+                .content("{\"__template__\":\"template ${foo}, ${bar}\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.template", is("template , ")))
+                .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
+    }
+
+    @Test
+    public void testUpdateTemplateDollarVariableWithParameterValues() throws Exception {
+        mockMvc.perform(post("/freemarker")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"__template__\":\"template ${foo}, ${bar}\", \"foo\":\"foo\", \"bar\":\"bar\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.template", is("template foo, bar")))
+                .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
     }
 
     @Test

@@ -8,6 +8,8 @@ import freemarker.template.TemplateModelException;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,30 +25,32 @@ public class TemplateTool {
                 continue;
             }
             Object wrappedObject = ((StringModel) templateModel).getWrappedObject();
-            if (!"DollarVariable".equals(wrappedObject.getClass().getSimpleName())) {
-                continue;
-            }
-
-            try {
-                Object expression = getInternalState(wrappedObject, "expression");
-                switch (expression.getClass().getSimpleName()) {
-                    case "Identifier":
-                        result.add(getInternalState(expression, "name").toString());
-                        break;
-                    case "DefaultToExpression":
-                        result.add(getInternalState(expression, "lho").toString());
-                        break;
-                    case "BuiltinVariable":
-                        break;
-                    default:
-                        throw new TemplateModelException("Unable to introspect variable " + expression +
-                                " of type " + expression.getClass());
-                }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new TemplateModelException("Unable to reflect template model", e);
+            switch (wrappedObject.getClass().getSimpleName()) {
+                case "DollarVariable":
+                    result.addAll(processDollarVariable(wrappedObject));
+                    break;
             }
         }
         return result;
+    }
+
+    private Collection<String> processDollarVariable(Object dollarVariable) throws TemplateModelException {
+        try {
+            Object expression = getInternalState(dollarVariable, "expression");
+            switch (expression.getClass().getSimpleName()) {
+                case "Identifier":
+                    return Collections.singleton(getInternalState(expression, "name").toString());
+                case "DefaultToExpression":
+                    return Collections.singleton(getInternalState(expression, "lho").toString());
+                case "BuiltinVariable":
+                    return Collections.emptySet();
+                default:
+                    throw new TemplateModelException("Unable to introspect variable " + expression +
+                            " of type " + expression.getClass());
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new TemplateModelException("Unable to reflect template model", e);
+        }
     }
 
     private Object getInternalState(Object o, String fieldName) throws NoSuchFieldException, IllegalAccessException {

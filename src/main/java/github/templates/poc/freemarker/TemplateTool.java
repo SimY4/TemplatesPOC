@@ -14,7 +14,6 @@ import java.util.Set;
 @Service("freeMarkerTemplateTool")
 public class TemplateTool {
 
-    @SuppressWarnings("deprecation")
     public Set<String> referenceSet(Template template) throws TemplateModelException {
         Set<String> result = new HashSet<>();
         TemplateElement rootTreeNode = template.getRootTreeNode();

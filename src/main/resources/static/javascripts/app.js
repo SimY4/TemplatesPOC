@@ -19,8 +19,7 @@ var templates = angular.module('templates', ['ui.bootstrap', 'ngRoute', 'templat
 
             $locationProvider.hashPrefix('!');
 
-            /* Register request error interceptor that shows alerts on UI or
-             redirects to login page on unauthenticated requests */
+            /* Register request error interceptor that shows alerts on UI */
             $httpProvider.interceptors.push(['$q', '$rootScope', '$log', function ($q, $rootScope, $log) {
                 return {
                     'responseError': function (rejection) {

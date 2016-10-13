@@ -33,15 +33,14 @@ public class FreemarkerController {
         this.templateTool = templateTool;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public TemplateTO getTemplate() throws IOException, TemplateModelException {
         Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
         return new TemplateTO(template.toString(), parameters);
     }
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public TemplateTO updateTemplate(@RequestBody Map<String, String> requestBody) throws IOException, TemplateException {
         String templateText = requestBody.remove("__template__");
         if (templateText != null) {

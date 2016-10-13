@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class TemplateTO {
 
-    public static final TemplateTO EMPTY = new TemplateTO("", Collections.<String>emptySet());
+    public static final TemplateTO EMPTY = new TemplateTO("", Collections.emptySet());
 
     private final String template;
     private final Set<String> parameters;

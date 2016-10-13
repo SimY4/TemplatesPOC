@@ -38,7 +38,7 @@ public class VelocityController {
         this.templateTool = templateTool;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public TemplateTO getTemplate() {
         StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
         StringResource templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
@@ -47,8 +47,7 @@ public class VelocityController {
         return new TemplateTO(templateResource.getBody(), parameters);
     }
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public TemplateTO updateTemplate(@RequestBody Map<String, String> requestBody) {
         String templateText = requestBody.remove("__template__");
         if (templateText != null) {

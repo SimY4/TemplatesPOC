@@ -76,16 +76,6 @@
                         <goals><goal>npm</goal></goals>
                         <phase>generate-resources</phase>
                     </execution>
-                    <!--<execution>
-                        <id>javascript unit tests</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <phase>test</phase>
-                        <configuration>
-                            <arguments>unit-tests-ci</arguments>
-                        </configuration>
-                    </execution>-->
                 </executions>
             </plugin>
             <plugin>

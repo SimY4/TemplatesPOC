@@ -1,3 +1,6 @@
 .idea/
+node/
+node_modules/
+src/main/resources/static/lib/
 target/
 *.iml

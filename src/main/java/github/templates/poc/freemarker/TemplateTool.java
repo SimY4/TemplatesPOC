@@ -13,9 +13,18 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Freemarker template utils.
+ */
 @Service("freeMarkerTemplateTool")
 public class TemplateTool {
 
+    /**
+     * Retrieves a list of arguments referenced in given template.
+     *
+     * @param template template to introspect
+     * @return set of arguments. Never returns null.
+     */
     public Set<String> referenceSet(Template template) throws TemplateModelException {
         Set<String> result = new HashSet<>();
         TemplateElement rootTreeNode = template.getRootTreeNode();
@@ -29,6 +38,7 @@ public class TemplateTool {
                 case "DollarVariable":
                     result.addAll(processDollarVariable(wrappedObject));
                     break;
+                default:
             }
         }
         return result;
@@ -46,8 +56,8 @@ public class TemplateTool {
                 case "BuiltinVariable":
                     return Collections.emptySet();
                 default:
-                    throw new TemplateModelException("Unable to introspect variable " + expression +
-                            " of type " + expression.getClass());
+                    throw new TemplateModelException("Unable to introspect variable " + expression
+                            + " of type " + expression.getClass());
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new TemplateModelException("Unable to reflect template model", e);

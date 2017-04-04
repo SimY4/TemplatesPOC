@@ -1,7 +1,7 @@
 {
   "name": "templates-poc",
   "private": true,
-  "version": "0.0.1-SNAPSHOT",
+  "version": "1.0.0-SNAPSHOT",
   "description": "Templating UI POC",
   "repository": "https://github.com/SimY4/TemplatesPOC",
   "dependencies": {},

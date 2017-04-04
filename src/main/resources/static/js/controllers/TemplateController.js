@@ -86,7 +86,7 @@ templates.controller('TemplateController', ['$scope', '$interval', '$injector', 
 
                 var found = false;
                 for (var j = 0; j < $scope.context.length; j++) {
-                    found |= $scope.context[i].paramName == parameter;
+                    found |= $scope.context[i].paramName === parameter;
                 }
                 if (!found) {
                     $scope.parameters.push(parameter);

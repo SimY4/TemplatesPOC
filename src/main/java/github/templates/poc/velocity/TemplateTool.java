@@ -13,6 +13,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Velocity template utils.
+ */
 @Service("velocityTemplateTool")
 public class TemplateTool {
 
@@ -23,6 +26,12 @@ public class TemplateTool {
         this.toolClassMap = toolManager.createContext().getToolClassMap();
     }
 
+    /**
+     * Retrieves a list of arguments referenced in given template.
+     *
+     * @param template template to introspect
+     * @return set of arguments. Never returns null.
+     */
     public Set<String> referenceSet(Template template) {
         SimpleNode simpleNode = (SimpleNode) template.getData();
         ReferenceNodeVisitor referenceNodeVisitor = new ReferenceNodeVisitor(toolClassMap);

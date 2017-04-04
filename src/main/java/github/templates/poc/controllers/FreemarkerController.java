@@ -2,19 +2,32 @@ package github.templates.poc.controllers;
 
 import freemarker.cache.StringTemplateLoader;
 import freemarker.core.ParseException;
-import freemarker.template.*;
+import freemarker.template.Configuration;
+import freemarker.template.MalformedTemplateNameException;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateNotFoundException;
 import github.templates.poc.freemarker.TemplateTool;
-import github.templates.poc.model.TemplateTO;
+import github.templates.poc.model.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Freemarker template engine REST controller.
+ */
 @RestController
 @RequestMapping("/freemarker")
 public class FreemarkerController {
@@ -25,6 +38,13 @@ public class FreemarkerController {
     private final Configuration freemarkerConfiguration;
     private final TemplateTool templateTool;
 
+    /**
+     * Constructor.
+     *
+     * @param stringTemplateLoader    freemarker template store
+     * @param freemarkerConfiguration freemarker configuration
+     * @param templateTool            freemarker utilities
+     */
     @Autowired
     public FreemarkerController(StringTemplateLoader stringTemplateLoader, Configuration freemarkerConfiguration,
                                 TemplateTool templateTool) {
@@ -33,25 +53,41 @@ public class FreemarkerController {
         this.templateTool = templateTool;
     }
 
+    /**
+     * Retrieves latest template with a list of arguments.
+     *
+     * @return latest template or new empty template. Never returns null.
+     * @throws IOException            should never happen.
+     * @throws TemplateModelException on failure to parse template arguments.
+     */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public TemplateTO getTemplate() throws IOException, TemplateModelException {
-        Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
+    public Template getTemplate() throws IOException, TemplateModelException {
+        freemarker.template.Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
-        return new TemplateTO(template.toString(), parameters);
+        return new Template(template.toString(), parameters);
     }
 
+    /**
+     * Sets the new template as well as new list of argument values.
+     *
+     * @param requestBody map containing new template with it's values
+     * @return template engine application result. Never returns null.
+     * @throws IOException       should never happen.
+     * @throws TemplateException on malformed template or inconsistent arguments.
+     */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public TemplateTO updateTemplate(@RequestBody Map<String, String> requestBody) throws IOException, TemplateException {
+    public Template updateTemplate(@RequestBody Map<String, String> requestBody)
+            throws IOException, TemplateException {
         String templateText = requestBody.remove("__template__");
         if (templateText != null) {
             setTemplate(templateText);
         }
-        Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
+        freemarker.template.Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
         long conversionTime = System.nanoTime();
         StringWriter writer = new StringWriter();
         template.process(requestBody, writer);
-        return new TemplateTO(writer.toString(), parameters, System.nanoTime() - conversionTime);
+        return new Template(writer.toString(), parameters, System.nanoTime() - conversionTime);
     }
 
     private void setTemplate(String template) {
@@ -59,11 +95,15 @@ public class FreemarkerController {
     }
 
     @ExceptionHandler(TemplateNotFoundException.class)
-    public TemplateTO handleAbsentTemplate() {
-        return TemplateTO.EMPTY;
+    public Template handleAbsentTemplate() {
+        return Template.EMPTY;
     }
 
-    @ExceptionHandler({ParseException.class, MalformedTemplateNameException.class, TemplateException.class})
+    @ExceptionHandler({
+            ParseException.class,
+            MalformedTemplateNameException.class,
+            TemplateException.class
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleTemplateParseFailure() { }
 

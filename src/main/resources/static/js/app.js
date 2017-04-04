@@ -30,7 +30,7 @@ var templates = angular.module('templates', ['ui.bootstrap', 'ngRoute', 'templat
 
                         if (!status) {
                             $rootScope.addAlert('danger', 'Server maintenance is currently taking place. Please stand by');
-                        } else if (status == 400) {
+                        } else if (400 === status) {
                             $log.warn('Template is invalid')
                         } else {
                             $rootScope.addAlert('danger', method + ' on ' + url + ' failed with status ' + status);

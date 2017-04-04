@@ -10,6 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * Starting point of this application.
+ */
 @SpringBootApplication
 public class TemplatesPocApplication {
 
@@ -19,15 +22,25 @@ public class TemplatesPocApplication {
 
     // Velocity template POC dependencies
 
+    /**
+     * Velocity engine bean factory.
+     *
+     * @return new velocity engine. Never returns null.
+     */
     @Bean(initMethod = "init")
     public VelocityEngine velocityEngine() {
         VelocityEngine velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
-        velocityEngine.setProperty("runtime.log.logsystem.log4j.logger", "github.templates.poc.velocity");
+        velocityEngine.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS,
+                "org.apache.velocity.runtime.log.Log4JLogChute");
+        velocityEngine.setProperty("runtime.log.logsystem.log4j.logger",
+                "github.templates.poc.velocity");
         velocityEngine.setProperty(Velocity.RESOURCE_LOADER, "string");
-        velocityEngine.setProperty("string.resource.loader.description", "Velocity StringResource loader");
-        velocityEngine.setProperty("string.resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
-        velocityEngine.setProperty("string.resource.loader.repository.class", "org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl");
+        velocityEngine.setProperty("string.resource.loader.description",
+                "Velocity StringResource loader");
+        velocityEngine.setProperty("string.resource.loader.class",
+                "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
+        velocityEngine.setProperty("string.resource.loader.repository.class",
+                "org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl");
         return velocityEngine;
     }
 
@@ -43,6 +56,11 @@ public class TemplatesPocApplication {
         return new StringTemplateLoader();
     }
 
+    /**
+     * Freemarker engine bean factory.
+     *
+     * @return new freemarker engine. Never returns null.
+     */
     @Bean
     public Configuration freeMarkerConfiguration(StringTemplateLoader templateLoader) {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_25);

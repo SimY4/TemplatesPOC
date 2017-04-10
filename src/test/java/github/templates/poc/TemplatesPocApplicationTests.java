@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TemplatesPocApplication.class, webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 public class TemplatesPocApplicationTests {
 
     @Test

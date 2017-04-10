@@ -1,6 +1,5 @@
 package github.templates.poc.controllers;
 
-import github.templates.poc.TemplatesPocApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TemplatesPocApplication.class, webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 public class FreemarkerControllerTest {
 
     @Autowired private WebApplicationContext webApplicationContext;

@@ -8,6 +8,7 @@ module.exports = function(config) {
             'lib/angular-resource/angular-resource.js',
             'lib/angular-route/angular-route.js',
             'lib/angular-mocks/angular-mocks.js',
+            'lib/codemirror/lib/codemirror.js',
             '**/*.module.js',
             '*!(.module|.spec).js',
             '!(lib)/**/*!(.module|.spec).js',
@@ -22,7 +23,7 @@ module.exports = function(config) {
 
         plugins: [
             'karma-chrome-launcher',
-            'karma-firefox-launcher',
+            // 'karma-firefox-launcher',
             'karma-jasmine'
         ]
     });

@@ -41,7 +41,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6" ng-show="alerts.length">
-            <alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.msg}}</alert>
+            <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + alert.type" close="closeAlert($index)">{{alert.msg}}</div>
         </div><!-- /.col -->
     </div><!-- /.row -->
     <ng-view></ng-view>

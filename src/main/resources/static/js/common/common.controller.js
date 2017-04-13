@@ -1,6 +1,6 @@
 'use strict';
 
-templates.controller('TemplateController', ['$scope', '$interval', '$injector', '$route',
+angular.module('templates.common').controller('CommonController', ['$scope', '$interval', '$injector', '$route',
     function ($scope, $interval, $injector, $route) {
 
         var changed = false;

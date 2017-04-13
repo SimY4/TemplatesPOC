@@ -1,18 +1,18 @@
 'use strict';
 
-var templates = angular.module('templates', ['ui.bootstrap', 'ngRoute', 'templates.services'])
+angular.module('templates')
     .config(['$routeProvider', '$locationProvider', '$httpProvider',
         function ($routeProvider, $locationProvider, $httpProvider) {
 
             /* Register view routing */
             $routeProvider.when('/velocity', {
-                controller: 'TemplateController',
+                controller: 'CommonController',
                 templateUrl: '/views/template.html',
-                templateService: 'velocityService'
+                templateService: 'VelocityService'
             }).when('/freemarker', {
-                controller: 'TemplateController',
+                controller: 'CommonController',
                 templateUrl: '/views/template.html',
-                templateService: 'freemarkerService'
+                templateService: 'FreemarkerService'
             }).otherwise({
                 redirectTo: '/'
             });
@@ -41,14 +41,12 @@ var templates = angular.module('templates', ['ui.bootstrap', 'ngRoute', 'templat
             }]);
 
         }]).run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
-        $rootScope.alerts = [];
+    $rootScope.alerts = [];
 
-        $rootScope.addAlert = function (type, message) {
-            $rootScope.alerts.push({type: type, msg: message});
-            $timeout(function () {
-                $rootScope.alerts.shift();
-            }, 3000);
-        };
-    }]);
-
-var services = angular.module('templates.services', ['ngResource']);
+    $rootScope.addAlert = function (type, message) {
+        $rootScope.alerts.push({type: type, msg: message});
+        $timeout(function () {
+            $rootScope.alerts.shift();
+        }, 3000);
+    };
+}]);

@@ -15,9 +15,7 @@ describe('CommonController', function() {
         CodeMirrorNg = function(elem, options) {
             expect(elem).toBeDefined();
             expect(options).toBeDefined();
-            return {
-                on: jasmine.createSpy('on')
-            }
+            return jasmine.createSpyObj('CodeMirror', ['on']);
         }
     });
 

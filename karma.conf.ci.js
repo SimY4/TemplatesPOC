@@ -5,6 +5,13 @@ module.exports = function(config) {
 
     config.set({
         singleRun: true,
-        autoWatch: false
+        autoWatch: false,
+
+        reporters: ['progress', 'junit'],
+
+        junitReporter: {
+            outputDir: '../../../../target/surefire-reports',
+            suite: 'ui'
+        }
     });
 };

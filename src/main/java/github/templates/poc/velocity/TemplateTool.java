@@ -3,7 +3,7 @@ package github.templates.poc.velocity;
 import org.apache.velocity.Template;
 import org.apache.velocity.runtime.parser.node.ASTReference;
 import org.apache.velocity.runtime.parser.node.ASTSetDirective;
-import org.apache.velocity.runtime.parser.node.SimpleNode;
+import org.apache.velocity.runtime.parser.node.Node;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
 import org.apache.velocity.tools.ToolManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +30,12 @@ public class TemplateTool {
      * Retrieves a list of arguments referenced in given template.
      *
      * @param template template to introspect
-     * @return set of arguments. Never returns null.
+     * @return set of arguments
      */
     public Set<String> referenceSet(Template template) {
-        SimpleNode simpleNode = (SimpleNode) template.getData();
+        Node node = (Node) template.getData();
         ReferenceNodeVisitor referenceNodeVisitor = new ReferenceNodeVisitor(toolClassMap);
-        simpleNode.jjtAccept(referenceNodeVisitor, null);
+        node.jjtAccept(referenceNodeVisitor, null);
         return referenceNodeVisitor.getReferenceSet();
     }
 

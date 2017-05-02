@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -56,7 +57,7 @@ public class VelocityController {
     /**
      * Retrieves latest template with a list of arguments.
      *
-     * @return latest template or new empty template. Never returns null.
+     * @return latest template or new empty template
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Template getTemplate() {
@@ -72,22 +73,21 @@ public class VelocityController {
      * Sets the new template as well as new list of argument values.
      *
      * @param requestBody map containing new template with it's values
-     * @return template engine application result. Never returns null.
+     * @return template engine application result
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Template updateTemplate(@RequestBody Map<String, String> requestBody) {
-        String templateText = requestBody.remove("__template__");
-        if (templateText != null) {
-            setTemplate(templateText);
-        }
+        Optional<String> maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
+        maybeTemplateText.ifPresent(this::setTemplate);
         org.apache.velocity.Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
         Set<String> parameters = templateTool.referenceSet(template);
         ToolContext toolContext = toolManager.createContext();
         toolContext.putAll(requestBody);
-        long conversionTime = System.nanoTime();
         StringWriter writer = new StringWriter();
+        long conversionTime = System.nanoTime();
         velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
-        return new Template(writer.toString(), parameters, System.nanoTime() - conversionTime);
+        conversionTime = System.nanoTime() - conversionTime;
+        return new Template(writer.toString(), parameters, conversionTime);
     }
 
     private void setTemplate(String template) {

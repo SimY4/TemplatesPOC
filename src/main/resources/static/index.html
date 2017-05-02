@@ -20,7 +20,8 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"
+                    aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -40,8 +41,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6" ng-show="alerts.length">
-            <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + alert.type" close="closeAlert($index)">{{alert.msg}}</div>
+        <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+            <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + alert.type">{{alert.msg}}</div>
         </div><!-- /.col -->
     </div><!-- /.row -->
     <ng-view></ng-view>

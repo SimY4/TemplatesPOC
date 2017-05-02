@@ -23,17 +23,22 @@ angular.module('templates')
             $httpProvider.interceptors.push(['$q', '$rootScope', '$log', function ($q, $rootScope, $log) {
                 return {
                     'responseError': function (rejection) {
-                        var status = rejection.status;
+                        var status = rejection.status || -1;
                         var config = rejection.config;
                         var method = config.method;
                         var url = config.url;
 
-                        if (!status) {
-                            $rootScope.addAlert('danger', 'Server maintenance is currently taking place. Please stand by');
-                        } else if (400 === status) {
-                            $log.warn('Template is invalid')
-                        } else {
-                            $rootScope.addAlert('danger', method + ' on ' + url + ' failed with status ' + status);
+                        switch (status) {
+                            case -1:
+                                $rootScope.addAlert('danger', 'Server maintenance is currently taking place. ' +
+                                    'Please stand by');
+                                break;
+                            case 400:
+                                $log.warn('Template is invalid');
+                                break;
+                            default:
+                                $rootScope.addAlert('danger', method + ' on ' + url + ' failed with status ' + status);
+                                break;
                         }
                         return $q.reject(rejection);
                     }

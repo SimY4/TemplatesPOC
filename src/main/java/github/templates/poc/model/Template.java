@@ -1,6 +1,7 @@
 package github.templates.poc.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,6 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 /**
  * Template JSON mapper.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(NON_NULL)
 public final class Template {
 

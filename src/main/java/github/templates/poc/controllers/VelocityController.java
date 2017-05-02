@@ -80,9 +80,9 @@ public class VelocityController {
         Optional<String> maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
         maybeTemplateText.ifPresent(this::setTemplate);
         org.apache.velocity.Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = templateTool.referenceSet(template);
         ToolContext toolContext = toolManager.createContext();
         toolContext.putAll(requestBody);
+        Set<String> parameters = templateTool.referenceSet(template);
         StringWriter writer = new StringWriter();
         long conversionTime = System.nanoTime();
         velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);

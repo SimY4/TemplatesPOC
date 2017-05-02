@@ -9,15 +9,50 @@ import org.apache.velocity.tools.ToolManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Starting point of this application.
  */
 @SpringBootApplication
+@EnableSwagger2
 public class TemplatesPocApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TemplatesPocApplication.class, args);
+    }
+
+    /**
+     * Swagger API configuration.
+     *
+     * @return Swagger API docket. Never returns null.
+     */
+    @Bean
+    public Docket api() {
+        List<ResponseMessage> defaultResponseMessages = Arrays.asList(
+                new ResponseMessageBuilder().code(HttpStatus.BAD_REQUEST.value())
+                        .message("Template Is Malformed").build(),
+                new ResponseMessageBuilder().code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .message("Internal Server Error").build()
+        );
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                .apis(RequestHandlerSelectors.basePackage("github.templates.poc.controllers"))
+                .paths(PathSelectors.any())
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponseMessage(RequestMethod.GET, defaultResponseMessages)
+                .globalResponseMessage(RequestMethod.POST, defaultResponseMessages);
     }
 
     // Velocity template POC dependencies

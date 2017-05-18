@@ -138,7 +138,8 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>validate</id>
+                        <id>check-style</id>
+                        <goals><goal>check</goal></goals>
                         <phase>validate</phase>
                         <configuration>
                             <configLocation>checkstyle.xml</configLocation>
@@ -146,11 +147,9 @@
                             <consoleOutput>true</consoleOutput>
                             <failOnViolation>true</failOnViolation>
                             <failsOnError>true</failsOnError>
+                            <violationSeverity>warning</violationSeverity>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         </configuration>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

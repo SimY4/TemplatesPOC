@@ -6,22 +6,20 @@
   "repository": "https://github.com/SimY4/TemplatesPOC",
   "dependencies": {},
   "devDependencies": {
-    "bower": "^1.7.7",
+    "bower": "^1.8.0",
     "http-server": "^0.10.0",
-    "jasmine-core": "^2.4.1",
-    "karma": "^1.6.0",
-    "karma-chrome-launcher": "^2.0.0",
+    "jasmine-core": "^2.6.4",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.1.1",
     "karma-firefox-launcher": "^1.0.1",
     "karma-jasmine": "^1.1.0",
     "karma-junit-reporter": "^1.2.0",
-    "protractor": "^5.1.1"
+    "protractor": "^5.1.2"
   },
   "scripts": {
     "postinstall": "bower install",
-
     "prestart": "npm install",
     "start": "http-server ./src/main/resources/static -a localhost -p 8000 -c-1",
-
     "pretest": "npm install",
     "test": "karma start karma.conf.js",
     "test-single-run": "karma start karma.conf.js --single-run"

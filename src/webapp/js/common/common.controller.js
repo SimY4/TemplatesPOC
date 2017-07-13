@@ -71,6 +71,8 @@ angular.module('templates.common').controller('CommonController',
 
             templateService.get().$promise.then(function (templateDetails) {
                 updateTemplate($scope.template, templateDetails)
+            }, function () {
+                updateTemplate($scope.template, { template: "", parameters: [] })
             });
 
             function updateTemplate(editorInstance, templateDetails) {

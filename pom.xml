@@ -22,6 +22,16 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+
+        <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
+        <velocity.version>1.7</velocity.version>
+        <velocity-tools.version>2.0</velocity-tools.version>
+
+        <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>
+        <node.version>v8.1.4</node.version>
+
+        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+        <checkstyle.version>8.0</checkstyle.version>
     </properties>
 
     <dependencies>
@@ -37,7 +47,7 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>2.7.0</version>
+            <version>${springfox-swagger2.version}</version>
         </dependency>
 
         <dependency>
@@ -48,12 +58,12 @@
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>1.7</version>
+            <version>${velocity.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-tools</artifactId>
-            <version>2.0</version>
+            <version>${velocity-tools.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.velocity</groupId>
@@ -82,7 +92,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -103,7 +112,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>${frontend-maven-plugin.version}</version>
                 <configuration>
                     <workingDirectory>${project.basedir}</workingDirectory>
                 </configuration>
@@ -113,7 +122,7 @@
                         <goals><goal>install-node-and-npm</goal></goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <nodeVersion>v8.1.2</nodeVersion>
+                            <nodeVersion>${node.version}</nodeVersion>
                         </configuration>
                     </execution>
                     <execution>
@@ -132,6 +141,7 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <configuration>
                     <filesets>
@@ -149,12 +159,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>${maven-checkstyle-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>7.8.1</version>
+                        <version>${checkstyle.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>

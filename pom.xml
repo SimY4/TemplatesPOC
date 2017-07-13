@@ -32,6 +32,8 @@
 
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
         <checkstyle.version>8.0</checkstyle.version>
+
+        <docker-maven-plugin.version>0.21.0</docker-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -84,10 +86,15 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <addResources>false</addResources>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -183,6 +190,29 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker-maven-plugin.version}</version>
+                <configuration>
+                    <useColor>true</useColor>
+                    <verbose>true</verbose>
+                    <autoPull>always</autoPull>
+
+                    <images>
+                        <image>
+                            <name>github.templates/poc</name>
+                            <build>
+                                <dockerFileDir>${project.basedir}</dockerFileDir>
+                                <filter>@</filter>
+                                <tags>
+                                    <tag>latest</tag>
+                                </tags>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
             </plugin>
         </plugins>
     </build>

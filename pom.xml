@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -27,11 +27,11 @@
         <velocity.version>1.7</velocity.version>
         <velocity-tools.version>2.0</velocity-tools.version>
 
-        <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>
-        <node.version>v8.1.4</node.version>
+        <frontend-maven-plugin.version>1.5</frontend-maven-plugin.version>
+        <node.version>v8.2.1</node.version>
 
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-        <checkstyle.version>8.0</checkstyle.version>
+        <checkstyle.version>8.1</checkstyle.version>
 
         <docker-maven-plugin.version>0.21.0</docker-maven-plugin.version>
     </properties>

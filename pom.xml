@@ -109,7 +109,7 @@
                             <resources>
                                 <resource>
                                     <directory>src/webapp</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>

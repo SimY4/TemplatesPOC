@@ -1,13 +1,13 @@
-package github.templates.poc.controllers;
+package com.github.simy4.poc.controllers;
 
+import com.github.simy4.poc.freemarker.TemplateTool;
+import com.github.simy4.poc.model.Template;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateNotFoundException;
-import github.templates.poc.freemarker.TemplateTool;
-import github.templates.poc.model.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

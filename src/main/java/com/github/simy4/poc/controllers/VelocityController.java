@@ -1,7 +1,7 @@
-package github.templates.poc.controllers;
+package com.github.simy4.poc.controllers;
 
-import github.templates.poc.model.Template;
-import github.templates.poc.velocity.TemplateTool;
+import com.github.simy4.poc.model.Template;
+import com.github.simy4.poc.velocity.TemplateTool;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;

@@ -1,4 +1,4 @@
-package github.templates.poc.controllers;
+package com.github.simy4.poc.controllers;
 
 import org.junit.Before;
 import org.junit.Test;

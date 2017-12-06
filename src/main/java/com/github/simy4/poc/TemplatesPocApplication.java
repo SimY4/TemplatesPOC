@@ -1,4 +1,4 @@
-package github.templates.poc;
+package com.github.simy4.poc;
 
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;

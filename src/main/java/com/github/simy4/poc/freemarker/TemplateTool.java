@@ -1,4 +1,4 @@
-package github.templates.poc.freemarker;
+package com.github.simy4.poc.freemarker;
 
 import freemarker.core.TemplateElement;
 import freemarker.ext.beans.StringModel;

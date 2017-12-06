@@ -1,4 +1,4 @@
-package github.templates.poc;
+package com.github.simy4.poc;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

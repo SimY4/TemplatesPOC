@@ -3,18 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>github.templates</groupId>
-    <artifactId>POC</artifactId>
+    <groupId>com.github.simy4</groupId>
+    <artifactId>templates-poc</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>templates-poc</name>
+    <name>Templates POC</name>
     <description>Templating UI POC</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.9.RELEASE</version>
+        <version>1.5.10.RELEASE</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
-        <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
+        <springfox-swagger2.version>2.8.0</springfox-swagger2.version>
         <velocity.version>1.7</velocity.version>
         <velocity-tools.version>2.0</velocity-tools.version>
 
@@ -31,7 +31,7 @@
         <node.version>v9.3.0</node.version>
 
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-        <checkstyle.version>8.5</checkstyle.version>
+        <checkstyle.version>8.8</checkstyle.version>
 
         <docker-maven-plugin.version>0.23.0</docker-maven-plugin.version>
     </properties>
@@ -202,7 +202,7 @@
 
                     <images>
                         <image>
-                            <name>github.templates/poc</name>
+                            <name>com.github.simy4.poc/templates</name>
                             <build>
                                 <dockerFileDir>${project.basedir}</dockerFileDir>
                                 <filter>@</filter>

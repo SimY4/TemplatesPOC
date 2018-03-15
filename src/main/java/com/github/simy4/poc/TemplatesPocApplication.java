@@ -47,7 +47,7 @@ public class TemplatesPocApplication {
                         .message("Internal Server Error").build()
         );
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("github.templates.poc.controllers"))
+                .apis(RequestHandlerSelectors.basePackage("com.github.simy4.poc.controllers"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)

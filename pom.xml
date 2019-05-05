@@ -27,13 +27,13 @@
         <velocity.version>1.7</velocity.version>
         <velocity-tools.version>2.0</velocity-tools.version>
 
-        <frontend-maven-plugin.version>1.7.5</frontend-maven-plugin.version>
-        <node.version>v11.13.0</node.version>
+        <frontend-maven-plugin.version>1.7.6</frontend-maven-plugin.version>
+        <node.version>v12.1.0</node.version>
 
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
-        <checkstyle.version>8.17</checkstyle.version>
+        <checkstyle.version>8.20</checkstyle.version>
 
-        <docker-maven-plugin.version>0.29.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.30.0</docker-maven-plugin.version>
     </properties>
 
     <dependencies>

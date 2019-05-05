@@ -1,17 +1,16 @@
 package com.github.simy4.poc.freemarker;
 
-import freemarker.core.TemplateElement;
 import freemarker.ext.beans.StringModel;
 import freemarker.template.Template;
-import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Freemarker template utils.
@@ -25,11 +24,12 @@ public class TemplateTool {
      * @param template template to introspect
      * @return set of arguments
      */
+    @SuppressWarnings("deprecation")
     public Set<String> referenceSet(Template template) throws TemplateModelException {
-        Set<String> result = new HashSet<>();
-        TemplateElement rootTreeNode = template.getRootTreeNode();
-        for (int i = 0; i < rootTreeNode.getChildCount(); i++) {
-            TemplateModel templateModel = rootTreeNode.getChildNodes().get(i);
+        var result = new HashSet<String>();
+        var rootTreeNode = template.getRootTreeNode();
+        for (var i = 0; i < rootTreeNode.getChildCount(); i++) {
+            var templateModel = rootTreeNode.getChildNodes().get(i);
             if (templateModel instanceof StringModel) {
                 processStringModel((StringModel) templateModel).ifPresent(result::add);
             }
@@ -38,7 +38,7 @@ public class TemplateTool {
     }
 
     private Optional<String> processStringModel(StringModel stringModel) {
-        Object wrappedObject = stringModel.getWrappedObject();
+        var wrappedObject = stringModel.getWrappedObject();
         switch (wrappedObject.getClass().getSimpleName()) {
             case "DollarVariable":
                 return processDollarVariable(wrappedObject);
@@ -48,7 +48,7 @@ public class TemplateTool {
     }
 
     private Optional<String> processDollarVariable(Object dollarVariable) {
-        Object expression = getInternalState(dollarVariable, "expression");
+        var expression = getInternalState(dollarVariable, "expression");
         switch (expression.getClass().getSimpleName()) {
             case "Identifier":
                 return Optional.of(getInternalState(expression, "name").toString());
@@ -64,8 +64,8 @@ public class TemplateTool {
     }
 
     private Object getInternalState(Object o, String fieldName) {
-        Field field = ReflectionUtils.findField(o.getClass(), fieldName);
-        ReflectionUtils.makeAccessible(field);
+        var field = ReflectionUtils.findField(o.getClass(), fieldName);
+        ReflectionUtils.makeAccessible(requireNonNull(field, "Field is null"));
         return ReflectionUtils.getField(field, o);
     }
 

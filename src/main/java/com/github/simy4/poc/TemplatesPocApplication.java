@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Starting point of this application.
@@ -40,7 +38,7 @@ public class TemplatesPocApplication {
      */
     @Bean
     public Docket api() {
-        List<ResponseMessage> defaultResponseMessages = Arrays.asList(
+        var defaultResponseMessages = Arrays.asList(
                 new ResponseMessageBuilder().code(HttpStatus.BAD_REQUEST.value())
                         .message("Template Is Malformed").build(),
                 new ResponseMessageBuilder().code(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -64,7 +62,7 @@ public class TemplatesPocApplication {
      */
     @Bean(initMethod = "init")
     public VelocityEngine velocityEngine() {
-        VelocityEngine velocityEngine = new VelocityEngine();
+        var velocityEngine = new VelocityEngine();
         velocityEngine.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS,
                 "org.apache.velocity.runtime.log.Log4JLogChute");
         velocityEngine.setProperty("runtime.log.logsystem.log4j.logger",
@@ -98,7 +96,7 @@ public class TemplatesPocApplication {
      */
     @Bean
     public Configuration freeMarkerConfiguration(StringTemplateLoader templateLoader) {
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
+        var configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateUpdateDelayMilliseconds(0L);
         configuration.setTemplateLoader(templateLoader);

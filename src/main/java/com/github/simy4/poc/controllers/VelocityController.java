@@ -7,9 +7,7 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
-import org.apache.velocity.runtime.resource.util.StringResource;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
-import org.apache.velocity.tools.ToolContext;
 import org.apache.velocity.tools.ToolManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Velocity template engine REST controller.
@@ -61,10 +58,10 @@ public class VelocityController {
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Template getTemplate() {
-        StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
-        StringResource templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
-        org.apache.velocity.Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = templateTool.referenceSet(template);
+        var templatesRepository = StringResourceLoader.getRepository();
+        var templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
+        var template = velocityEngine.getTemplate(TEMPLATE_NAME);
+        var parameters = templateTool.referenceSet(template);
         return new Template(templateResource.getBody(), parameters);
     }
 
@@ -77,14 +74,14 @@ public class VelocityController {
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Template updateTemplate(@RequestBody Map<String, String> requestBody) {
-        Optional<String> maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
+        var maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
         maybeTemplateText.ifPresent(this::setTemplate);
-        org.apache.velocity.Template template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        ToolContext toolContext = toolManager.createContext();
+        var template = velocityEngine.getTemplate(TEMPLATE_NAME);
+        var toolContext = toolManager.createContext();
         toolContext.putAll(requestBody);
-        Set<String> parameters = templateTool.referenceSet(template);
-        StringWriter writer = new StringWriter();
-        long conversionTime = System.nanoTime();
+        var parameters = templateTool.referenceSet(template);
+        var writer = new StringWriter();
+        var conversionTime = System.nanoTime();
         velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
         conversionTime = System.nanoTime() - conversionTime;
         return new Template(writer.toString(), parameters, conversionTime);
@@ -105,6 +102,7 @@ public class VelocityController {
             MethodInvocationException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleTemplateParseFailure() { }
+    public void handleTemplateParseFailure() {
+    }
 
 }

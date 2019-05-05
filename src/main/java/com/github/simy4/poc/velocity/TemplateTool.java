@@ -33,8 +33,8 @@ public class TemplateTool {
      * @return set of arguments
      */
     public Set<String> referenceSet(Template template) {
-        Node node = (Node) template.getData();
-        ReferenceNodeVisitor referenceNodeVisitor = new ReferenceNodeVisitor(toolClassMap);
+        var node = (Node) template.getData();
+        var referenceNodeVisitor = new ReferenceNodeVisitor(toolClassMap);
         node.jjtAccept(referenceNodeVisitor, null);
         return referenceNodeVisitor.getReferenceSet();
     }
@@ -61,7 +61,7 @@ public class TemplateTool {
 
         @Override
         public Object visit(ASTReference node, Object data) {
-            String literal = node.getRootString();
+            var literal = node.getRootString();
             if (!toolClassMap.containsKey(literal) && !localReferences.contains(literal)) {
                 referenceSet.add(literal);
             }

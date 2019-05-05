@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Freemarker template engine REST controller.
@@ -62,8 +61,8 @@ public class FreemarkerController {
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Template getTemplate() throws IOException, TemplateModelException {
-        freemarker.template.Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = templateTool.referenceSet(template);
+        var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
+        var parameters = templateTool.referenceSet(template);
         return new Template(template.toString(), parameters);
     }
 
@@ -77,12 +76,12 @@ public class FreemarkerController {
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Template updateTemplate(@RequestBody Map<String, String> requestBody) throws IOException, TemplateException {
-        Optional<String> maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
+        var maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
         maybeTemplateText.ifPresent(this::setTemplate);
-        freemarker.template.Template template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
-        Set<String> parameters = templateTool.referenceSet(template);
-        StringWriter writer = new StringWriter();
-        long conversionTime = System.nanoTime();
+        var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
+        var parameters = templateTool.referenceSet(template);
+        var writer = new StringWriter();
+        var conversionTime = System.nanoTime();
         template.process(requestBody, writer);
         conversionTime = System.nanoTime() - conversionTime;
         return new Template(writer.toString(), parameters, conversionTime);
@@ -102,6 +101,7 @@ public class FreemarkerController {
             TemplateException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleTemplateParseFailure() { }
+    public void handleTemplateParseFailure() {
+    }
 
 }

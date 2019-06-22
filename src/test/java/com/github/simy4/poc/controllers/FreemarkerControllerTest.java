@@ -1,12 +1,12 @@
 package com.github.simy4.poc.controllers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -20,28 +20,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class FreemarkerControllerTest {
+class FreemarkerControllerTest {
 
     @Autowired private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
-    public void testGetTemplateNoTemplate() throws Exception {
+    void testGetTemplateNoTemplate() throws Exception {
         mockMvc.perform(get("/freemarker"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    public void testUpdateTemplateDollarVariable() throws Exception {
+    void testUpdateTemplateDollarVariable() throws Exception {
         mockMvc.perform(post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template ${foo}, ${bar!''}\"}"))
@@ -52,7 +52,7 @@ public class FreemarkerControllerTest {
     }
 
     @Test
-    public void testUpdateTemplateDollarVariableWithParameterValues() throws Exception {
+    void testUpdateTemplateDollarVariableWithParameterValues() throws Exception {
         mockMvc.perform(post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template ${foo}, ${bar!''}\", \"foo\":\"foo\", \"bar\":\"bar\"}"))
@@ -63,7 +63,7 @@ public class FreemarkerControllerTest {
     }
 
     @Test
-    public void testUpdateTemplateBadTemplate() throws Exception {
+    void testUpdateTemplateBadTemplate() throws Exception {
         mockMvc.perform(post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template ${olo\"}"))

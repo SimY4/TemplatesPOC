@@ -19,11 +19,12 @@ import java.util.Set;
 @Service("velocityTemplateTool")
 public class TemplateTool {
 
-    private final Map<String, Class> toolClassMap;
+    private final Map<String, Class<?>> toolClassMap;
 
     @Autowired
+    @SuppressWarnings("unchecked")
     public TemplateTool(ToolManager toolManager) {
-        this.toolClassMap = toolManager.createContext().getToolClassMap();
+        this.toolClassMap = (Map) toolManager.createContext().getToolClassMap();
     }
 
     /**
@@ -41,11 +42,11 @@ public class TemplateTool {
 
     private static class ReferenceNodeVisitor extends BaseVisitor {
 
-        private final Map<String, Class> toolClassMap;
+        private final Map<String, Class<?>> toolClassMap;
         private final Set<String> referenceSet = new HashSet<>();
         private final Set<String> localReferences = new HashSet<>();
 
-        private ReferenceNodeVisitor(Map<String, Class> toolClassMap) {
+        private ReferenceNodeVisitor(Map<String, Class<?>> toolClassMap) {
             this.toolClassMap = toolClassMap;
         }
 

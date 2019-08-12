@@ -35,7 +35,7 @@
         <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
         <checkstyle.version>8.23</checkstyle.version>
 
-        <docker-maven-plugin.version>0.30.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.31.0</docker-maven-plugin.version>
     </properties>
 
     <dependencies>

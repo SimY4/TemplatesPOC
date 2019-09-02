@@ -33,7 +33,7 @@
         <node.version>v12.1.0</node.version>
 
         <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
-        <checkstyle.version>8.23</checkstyle.version>
+        <checkstyle.version>8.24</checkstyle.version>
 
         <docker-maven-plugin.version>0.31.0</docker-maven-plugin.version>
     </properties>

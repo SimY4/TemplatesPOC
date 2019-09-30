@@ -4,15 +4,14 @@ module.exports = function(config) {
 
         files: [
             'lib/angular/angular.js',
-            'lib/angular-bootstrap/ui-bootstrap-tpls.js',
+            'lib/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
             'lib/angular-resource/angular-resource.js',
             'lib/angular-route/angular-route.js',
             'lib/angular-mocks/angular-mocks.js',
             'lib/codemirror/lib/codemirror.js',
-            '**/*.module.js',
-            '*!(.module|.spec).js',
+            '!(lib)/**/*.module.js',
             '!(lib)/**/*!(.module|.spec).js',
-            '**/*.spec.js'
+            '!(lib)/**/*.spec.js'
         ],
 
         autoWatch: true,

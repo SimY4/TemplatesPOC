@@ -37,7 +37,7 @@ class FreemarkerControllerTest {
     void testGetTemplateNoTemplate() throws Exception {
         mockMvc.perform(get("/freemarker"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -46,7 +46,7 @@ class FreemarkerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template ${foo}, ${bar!''}\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template , ")))
                 .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
     }
@@ -57,7 +57,7 @@ class FreemarkerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template ${foo}, ${bar!''}\", \"foo\":\"foo\", \"bar\":\"bar\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template foo, bar")))
                 .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
     }

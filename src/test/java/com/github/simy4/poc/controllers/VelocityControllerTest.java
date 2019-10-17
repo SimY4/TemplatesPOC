@@ -38,7 +38,7 @@ class VelocityControllerTest {
     void testGetTemplateNoTemplate() throws Exception {
         mockMvc.perform(get("/velocity"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -47,7 +47,7 @@ class VelocityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template $foo, $!bar, ${foo}, $!{bar}\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template $foo, , ${foo}, ")))
                 .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
     }
@@ -59,7 +59,7 @@ class VelocityControllerTest {
                 .content("{\"__template__\":\"template $foo, $!bar, ${foo}, $!{bar}\", "
                         + "\"foo\":\"foo\", \"bar\":\"bar\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template foo, bar, foo, bar")))
                 .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
     }
@@ -70,7 +70,7 @@ class VelocityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"__template__\":\"template #set($foo = 'test')\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template ")))
                 .andExpect(jsonPath("$.parameters", empty()));
     }

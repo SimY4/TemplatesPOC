@@ -22,7 +22,7 @@ public class TemplateTool {
     private final Map<String, Class<?>> toolClassMap;
 
     @Autowired
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public TemplateTool(ToolManager toolManager) {
         this.toolClassMap = (Map) toolManager.createContext().getToolClassMap();
     }

@@ -1,0 +1,17 @@
+spring.application.name: Template POC
+
+server:
+  port: 9000
+
+springdoc.swagger-ui.path: '/'
+
+logging:
+  file.name: templates-poc.log
+  level:
+    com.github.simy4.poc: DEBUG
+    com.github.simy4.poc.velocity: WARN
+    org.springframework: WARN
+    org.apache.velocity: WARN
+    freemarker: WARN
+
+management.server.port: 9001

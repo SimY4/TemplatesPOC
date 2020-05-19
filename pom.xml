@@ -103,6 +103,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
                     <classifier>exec</classifier>
                 </configuration>
             </plugin>
@@ -185,23 +188,32 @@
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${docker-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>com.github.simy4.poc/templates</name>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}</dockerFileDir>
+                                        <filter>@</filter>
+                                        <tags>
+                                            <tag>latest</tag>
+                                        </tags>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <useColor>true</useColor>
                     <verbose>true</verbose>
                     <autoPull>always</autoPull>
-
-                    <images>
-                        <image>
-                            <name>com.github.simy4.poc/templates</name>
-                            <build>
-                                <dockerFileDir>${project.basedir}</dockerFileDir>
-                                <filter>@</filter>
-                                <tags>
-                                    <tag>latest</tag>
-                                </tags>
-                            </build>
-                        </image>
-                    </images>
                 </configuration>
             </plugin>
         </plugins>

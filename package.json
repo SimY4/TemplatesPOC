@@ -5,7 +5,7 @@
   "description": "Templating UI POC",
   "repository": "https://github.com/SimY4/TemplatesPOC",
   "dependencies": {
-    "angular": "^1.7.9",
+    "angular": "^1.8.0",
     "angular-loader": "^1.7.9",
     "angular-resource": "^1.7.9",
     "angular-route": "^1.7.9",

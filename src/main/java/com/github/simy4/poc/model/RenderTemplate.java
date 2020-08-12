@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RenderTemplate {
 
     private final String template;
-    private final Map<String, String> parameters;
+    private final @NotNull Map<String, String> parameters;
 
     @JsonCreator
     public RenderTemplate(@JsonProperty("template") String template,

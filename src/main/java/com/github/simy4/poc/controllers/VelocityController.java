@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.io.StringWriter;
 import java.util.Optional;
 
@@ -74,7 +75,7 @@ public class VelocityController {
      * @return template engine application result
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public RenderedTemplate updateTemplate(@RequestBody RenderTemplate request) {
+    public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
         var maybeTemplateText = Optional.ofNullable(request.getTemplate());
         maybeTemplateText.ifPresent(this::setTemplate);
         var template = velocityEngine.getTemplate(TEMPLATE_NAME);

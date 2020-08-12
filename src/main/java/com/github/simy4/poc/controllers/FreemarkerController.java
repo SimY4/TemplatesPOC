@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Optional;
@@ -76,7 +77,8 @@ public class FreemarkerController {
      * @throws TemplateException on malformed template or inconsistent arguments.
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public RenderedTemplate updateTemplate(@RequestBody RenderTemplate request) throws IOException, TemplateException {
+    public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request)
+            throws IOException, TemplateException {
         var maybeTemplateText = Optional.ofNullable(request.getTemplate());
         maybeTemplateText.ifPresent(this::setTemplate);
         var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);

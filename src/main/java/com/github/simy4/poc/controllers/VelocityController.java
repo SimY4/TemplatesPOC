@@ -1,5 +1,7 @@
 package com.github.simy4.poc.controllers;
 
+import com.github.simy4.poc.model.RenderTemplate;
+import com.github.simy4.poc.model.RenderedTemplate;
 import com.github.simy4.poc.model.Template;
 import com.github.simy4.poc.velocity.TemplateTool;
 import org.apache.velocity.app.VelocityEngine;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.StringWriter;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -69,22 +70,22 @@ public class VelocityController {
     /**
      * Sets the new template as well as new list of argument values.
      *
-     * @param requestBody map containing new template with it's values
+     * @param request request containing a new template with parameter values
      * @return template engine application result
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Template updateTemplate(@RequestBody Map<String, String> requestBody) {
-        var maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
+    public RenderedTemplate updateTemplate(@RequestBody RenderTemplate request) {
+        var maybeTemplateText = Optional.ofNullable(request.getTemplate());
         maybeTemplateText.ifPresent(this::setTemplate);
         var template = velocityEngine.getTemplate(TEMPLATE_NAME);
         var toolContext = toolManager.createContext();
-        toolContext.putAll(requestBody);
+        toolContext.putAll(request.getParameters());
         var parameters = templateTool.referenceSet(template);
         var writer = new StringWriter();
         var conversionTime = System.nanoTime();
         velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
         conversionTime = System.nanoTime() - conversionTime;
-        return new Template(writer.toString(), parameters, conversionTime);
+        return new RenderedTemplate(writer.toString(), parameters, conversionTime);
     }
 
     private void setTemplate(String template) {

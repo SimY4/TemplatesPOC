@@ -1,6 +1,8 @@
 package com.github.simy4.poc.controllers;
 
 import com.github.simy4.poc.freemarker.TemplateTool;
+import com.github.simy4.poc.model.RenderTemplate;
+import com.github.simy4.poc.model.RenderedTemplate;
 import com.github.simy4.poc.model.Template;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.core.ParseException;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -69,22 +70,22 @@ public class FreemarkerController {
     /**
      * Sets the new template as well as new list of argument values.
      *
-     * @param requestBody map containing new template with it's values
+     * @param request request containing a new template with parameter values
      * @return template engine application result
      * @throws IOException       should never happen.
      * @throws TemplateException on malformed template or inconsistent arguments.
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Template updateTemplate(@RequestBody Map<String, String> requestBody) throws IOException, TemplateException {
-        var maybeTemplateText = Optional.ofNullable(requestBody.remove("__template__"));
+    public RenderedTemplate updateTemplate(@RequestBody RenderTemplate request) throws IOException, TemplateException {
+        var maybeTemplateText = Optional.ofNullable(request.getTemplate());
         maybeTemplateText.ifPresent(this::setTemplate);
         var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
         var parameters = templateTool.referenceSet(template);
         var writer = new StringWriter();
         var conversionTime = System.nanoTime();
-        template.process(requestBody, writer);
+        template.process(request.getParameters(), writer);
         conversionTime = System.nanoTime() - conversionTime;
-        return new Template(writer.toString(), parameters, conversionTime);
+        return new RenderedTemplate(writer.toString(), parameters, conversionTime);
     }
 
     private void setTemplate(String template) {

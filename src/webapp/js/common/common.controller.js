@@ -49,15 +49,15 @@ angular.module('templates.common').controller('CommonController',
             };
 
             $scope.convert = function (parameters, template) {
-                var request = {};
-                if (angular.isDefined(template)) {
-                    request['__template__'] = template;
-                }
+                var params = {}
                 for (var i = 0; i < parameters.length; i++) {
                     var parameter = parameters[i];
-                    request[parameter.paramName] = parameter.paramValue;
+                    params[parameter.paramName] = parameter.paramValue;
                 }
-                templateService.save(request).$promise.then(function (templateDetails) {
+                templateService.save({
+                  template: template,
+                  parameters: params
+                }).$promise.then(function (templateDetails) {
                     updateTemplate($scope.result, templateDetails)
                 });
             };

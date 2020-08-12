@@ -45,7 +45,7 @@ class VelocityControllerTest {
     void testUpdateTemplateDollarVariable() throws Exception {
         mockMvc.perform(post("/velocity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template $foo, $!bar, ${foo}, $!{bar}\"}"))
+                .content("{\"template\":\"template $foo, $!bar, ${foo}, $!{bar}\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template $foo, , ${foo}, ")))
@@ -56,8 +56,8 @@ class VelocityControllerTest {
     void testUpdateTemplateDollarVariableWithParameterValues() throws Exception {
         mockMvc.perform(post("/velocity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template $foo, $!bar, ${foo}, $!{bar}\", "
-                        + "\"foo\":\"foo\", \"bar\":\"bar\"}"))
+                .content("{\"template\":\"template $foo, $!bar, ${foo}, $!{bar}\", "
+                        + "\"parameters\": {\"foo\":\"foo\", \"bar\":\"bar\"}}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template foo, bar, foo, bar")))
@@ -68,7 +68,7 @@ class VelocityControllerTest {
     void testUpdateTemplateSet() throws Exception {
         mockMvc.perform(post("/velocity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template #set($foo = 'test')\"}"))
+                .content("{\"template\":\"template #set($foo = 'test')\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.template", is("template ")))
@@ -79,7 +79,7 @@ class VelocityControllerTest {
     void testUpdateTemplateBadTemplate() throws Exception {
         mockMvc.perform(post("/velocity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"__template__\":\"template ${foo\"}"))
+                .content("{\"template\":\"template ${foo\"}"))
                 .andExpect(status().isBadRequest());
     }
 

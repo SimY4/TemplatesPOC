@@ -1,4 +1,4 @@
-spring.application.name: Template POC
+spring.application.name: @project.name@
 
 server:
   port: 9000

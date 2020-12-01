@@ -2,6 +2,9 @@ package com.github.simy4.poc.model;
 
 import java.util.Set;
 
+/**
+ * Rendered template.
+ */
 public class RenderedTemplate {
 
     private final String template;

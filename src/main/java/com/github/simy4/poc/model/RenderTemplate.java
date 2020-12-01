@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
+/**
+ * Render template.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RenderTemplate {
 

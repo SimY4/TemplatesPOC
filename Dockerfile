@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot as builder
 WORKDIR application
-ARG JAR_FILE=target/template-poc-exec.jar
+ARG JAR_FILE=target/templates-poc-exec.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 

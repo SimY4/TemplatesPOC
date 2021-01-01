@@ -9,7 +9,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class TemplatesPocApplicationTests {
+class TemplatesPocApplicationTest {
 
     @Test
     void contextLoads() {

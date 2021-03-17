@@ -30,9 +30,7 @@ public class TemplatesPocApplication {
     @Bean(initMethod = "init")
     public VelocityEngine velocityEngine() {
         var velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS,
-                "org.apache.velocity.runtime.log.Log4JLogChute");
-        velocityEngine.setProperty("runtime.log.logsystem.log4j.logger",
+        velocityEngine.setProperty(Velocity.RUNTIME_LOG_NAME,
                 "com.github.simy4.poc.velocity");
         velocityEngine.setProperty(Velocity.RESOURCE_LOADER, "string");
         velocityEngine.setProperty("string.resource.loader.description",

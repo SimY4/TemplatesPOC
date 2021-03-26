@@ -27,7 +27,7 @@
         <velocity.version>2.3</velocity.version>
         <velocity-tools.version>3.1</velocity-tools.version>
 
-        <frontend-maven-plugin.version>1.11.2</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
         <node.version>v14.15.1</node.version>
 
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>

@@ -33,11 +33,11 @@ public class TemplatesPocApplication {
         velocityEngine.setProperty(Velocity.RUNTIME_LOG_NAME,
                 "com.github.simy4.poc.velocity");
         velocityEngine.setProperty(Velocity.RESOURCE_LOADERS, "string");
-        velocityEngine.setProperty(Velocity.RESOURCE_LOADER + "string.description",
+        velocityEngine.setProperty(Velocity.RESOURCE_LOADER + ".string.description",
                 "Velocity StringResource loader");
         velocityEngine.setProperty(Velocity.RESOURCE_LOADER + ".string.class",
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
-        velocityEngine.setProperty(Velocity.RESOURCE_LOADER + "string.repository.class",
+        velocityEngine.setProperty(Velocity.RESOURCE_LOADER + ".string.repository.class",
                 "org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl");
         return velocityEngine;
     }

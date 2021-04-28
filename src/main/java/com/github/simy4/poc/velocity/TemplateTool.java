@@ -13,62 +13,58 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Velocity template utils.
- */
+/** Velocity template utils. */
 @Service("velocityTemplateTool")
 public class TemplateTool {
 
+  private final Map<String, Class<?>> toolClassMap;
+
+  @Autowired
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public TemplateTool(ToolManager toolManager) {
+    this.toolClassMap = (Map) toolManager.createContext().getToolClassMap();
+  }
+
+  /**
+   * Retrieves a list of arguments referenced in given template.
+   *
+   * @param template template to introspect
+   * @return set of arguments
+   */
+  public Set<String> referenceSet(Template template) {
+    var node = (Node) template.getData();
+    var referenceNodeVisitor = new ReferenceNodeVisitor(toolClassMap);
+    node.jjtAccept(referenceNodeVisitor, null);
+    return referenceNodeVisitor.getReferenceSet();
+  }
+
+  private static class ReferenceNodeVisitor extends BaseVisitor {
+
     private final Map<String, Class<?>> toolClassMap;
+    private final Set<String> referenceSet = new HashSet<>();
+    private final Set<String> localReferences = new HashSet<>();
 
-    @Autowired
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public TemplateTool(ToolManager toolManager) {
-        this.toolClassMap = (Map) toolManager.createContext().getToolClassMap();
+    private ReferenceNodeVisitor(Map<String, Class<?>> toolClassMap) {
+      this.toolClassMap = toolClassMap;
     }
 
-    /**
-     * Retrieves a list of arguments referenced in given template.
-     *
-     * @param template template to introspect
-     * @return set of arguments
-     */
-    public Set<String> referenceSet(Template template) {
-        var node = (Node) template.getData();
-        var referenceNodeVisitor = new ReferenceNodeVisitor(toolClassMap);
-        node.jjtAccept(referenceNodeVisitor, null);
-        return referenceNodeVisitor.getReferenceSet();
+    private Set<String> getReferenceSet() {
+      return referenceSet;
     }
 
-    private static class ReferenceNodeVisitor extends BaseVisitor {
-
-        private final Map<String, Class<?>> toolClassMap;
-        private final Set<String> referenceSet = new HashSet<>();
-        private final Set<String> localReferences = new HashSet<>();
-
-        private ReferenceNodeVisitor(Map<String, Class<?>> toolClassMap) {
-            this.toolClassMap = toolClassMap;
-        }
-
-        private Set<String> getReferenceSet() {
-            return referenceSet;
-        }
-
-        @Override
-        public Object visit(ASTSetDirective node, Object data) {
-            localReferences.add(((ASTReference) node.jjtGetChild(0)).getRootString());
-            return super.visit(node, data);
-        }
-
-        @Override
-        public Object visit(ASTReference node, Object data) {
-            var literal = node.getRootString();
-            if (!toolClassMap.containsKey(literal) && !localReferences.contains(literal)) {
-                referenceSet.add(literal);
-            }
-            return super.visit(node, data);
-        }
-
+    @Override
+    public Object visit(ASTSetDirective node, Object data) {
+      localReferences.add(((ASTReference) node.jjtGetChild(0)).getRootString());
+      return super.visit(node, data);
     }
 
+    @Override
+    public Object visit(ASTReference node, Object data) {
+      var literal = node.getRootString();
+      if (!toolClassMap.containsKey(literal) && !localReferences.contains(literal)) {
+        referenceSet.add(literal);
+      }
+      return super.visit(node, data);
+    }
+  }
 }

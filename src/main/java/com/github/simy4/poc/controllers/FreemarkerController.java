@@ -22,89 +22,87 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Optional;
 
-/**
- * Freemarker template engine REST controller.
- */
+/** Freemarker template engine REST controller. */
 @RestController
 @RequestMapping("/freemarker")
 public class FreemarkerController {
 
-    private static final String TEMPLATE_NAME = "template";
+  private static final String TEMPLATE_NAME = "template";
 
-    private final StringTemplateLoader stringTemplateLoader;
-    private final Configuration freemarkerConfiguration;
-    private final TemplateTool templateTool;
+  private final StringTemplateLoader stringTemplateLoader;
+  private final Configuration freemarkerConfiguration;
+  private final TemplateTool templateTool;
 
-    /**
-     * Constructor.
-     *
-     * @param stringTemplateLoader    freemarker template store
-     * @param freemarkerConfiguration freemarker configuration
-     * @param templateTool            freemarker utilities
-     */
-    @Autowired
-    public FreemarkerController(StringTemplateLoader stringTemplateLoader, Configuration freemarkerConfiguration,
-                                TemplateTool templateTool) {
-        this.stringTemplateLoader = stringTemplateLoader;
-        this.freemarkerConfiguration = freemarkerConfiguration;
-        this.templateTool = templateTool;
-    }
+  /**
+   * Constructor.
+   *
+   * @param stringTemplateLoader freemarker template store
+   * @param freemarkerConfiguration freemarker configuration
+   * @param templateTool freemarker utilities
+   */
+  @Autowired
+  public FreemarkerController(
+      StringTemplateLoader stringTemplateLoader,
+      Configuration freemarkerConfiguration,
+      TemplateTool templateTool) {
+    this.stringTemplateLoader = stringTemplateLoader;
+    this.freemarkerConfiguration = freemarkerConfiguration;
+    this.templateTool = templateTool;
+  }
 
-    /**
-     * Retrieves latest template with a list of arguments.
-     *
-     * @return latest template or new empty template
-     * @throws IOException            should never happen.
-     * @throws TemplateModelException on failure to parse template arguments.
-     */
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Template getTemplate() throws IOException, TemplateModelException {
-        var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
-        var parameters = templateTool.referenceSet(template);
-        return new Template(template.toString(), parameters);
-    }
+  /**
+   * Retrieves latest template with a list of arguments.
+   *
+   * @return latest template or new empty template
+   * @throws IOException should never happen.
+   * @throws TemplateModelException on failure to parse template arguments.
+   */
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Template getTemplate() throws IOException, TemplateModelException {
+    var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
+    var parameters = templateTool.referenceSet(template);
+    return new Template(template.toString(), parameters);
+  }
 
-    /**
-     * Sets the new template as well as new list of argument values.
-     *
-     * @param request request containing a new template with parameter values
-     * @return template engine application result
-     * @throws IOException       should never happen.
-     * @throws TemplateException on malformed template or inconsistent arguments.
-     */
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request)
-            throws IOException, TemplateException {
-        var maybeTemplateText = Optional.ofNullable(request.getTemplate());
-        maybeTemplateText.ifPresent(this::setTemplate);
-        var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
-        var parameters = templateTool.referenceSet(template);
-        var writer = new StringWriter();
-        var conversionTime = System.nanoTime();
-        template.process(request.getParameters(), writer);
-        conversionTime = System.nanoTime() - conversionTime;
-        return new RenderedTemplate(writer.toString(), parameters, conversionTime);
-    }
+  /**
+   * Sets the new template as well as new list of argument values.
+   *
+   * @param request request containing a new template with parameter values
+   * @return template engine application result
+   * @throws IOException should never happen.
+   * @throws TemplateException on malformed template or inconsistent arguments.
+   */
+  @PostMapping(
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request)
+      throws IOException, TemplateException {
+    var maybeTemplateText = Optional.ofNullable(request.getTemplate());
+    maybeTemplateText.ifPresent(this::setTemplate);
+    var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
+    var parameters = templateTool.referenceSet(template);
+    var writer = new StringWriter();
+    var conversionTime = System.nanoTime();
+    template.process(request.getParameters(), writer);
+    conversionTime = System.nanoTime() - conversionTime;
+    return new RenderedTemplate(writer.toString(), parameters, conversionTime);
+  }
 
-    private void setTemplate(String template) {
-        stringTemplateLoader.putTemplate(TEMPLATE_NAME, template);
-    }
+  private void setTemplate(String template) {
+    stringTemplateLoader.putTemplate(TEMPLATE_NAME, template);
+  }
 
-    @ExceptionHandler(TemplateNotFoundException.class)
-    public Template handleAbsentTemplate() {
-        return Template.EMPTY;
-    }
+  @ExceptionHandler(TemplateNotFoundException.class)
+  public Template handleAbsentTemplate() {
+    return Template.EMPTY;
+  }
 
-    @ExceptionHandler({
-            ParseException.class,
-            TemplateException.class
-    })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleTemplateParseFailure() {
-    }
-
+  @ExceptionHandler({ParseException.class, TemplateException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public void handleTemplateParseFailure() {}
 }

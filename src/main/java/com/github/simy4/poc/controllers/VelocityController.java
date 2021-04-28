@@ -23,88 +23,84 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
 import java.io.StringWriter;
 import java.util.Optional;
 
-/**
- * Velocity template engine REST controller.
- */
+/** Velocity template engine REST controller. */
 @RestController
 @RequestMapping("/velocity")
 public class VelocityController {
 
-    private static final String TEMPLATE_NAME = "template";
+  private static final String TEMPLATE_NAME = "template";
 
-    private final VelocityEngine velocityEngine;
-    private final ToolManager toolManager;
-    private final TemplateTool templateTool;
+  private final VelocityEngine velocityEngine;
+  private final ToolManager toolManager;
+  private final TemplateTool templateTool;
 
-    /**
-     * Constructor.
-     *
-     * @param velocityEngine velocity template store
-     * @param toolManager    built in velocity tools
-     * @param templateTool   velocity utilities
-     */
-    @Autowired
-    public VelocityController(VelocityEngine velocityEngine, ToolManager toolManager, TemplateTool templateTool) {
-        this.velocityEngine = velocityEngine;
-        this.toolManager = toolManager;
-        this.templateTool = templateTool;
-    }
+  /**
+   * Constructor.
+   *
+   * @param velocityEngine velocity template store
+   * @param toolManager built in velocity tools
+   * @param templateTool velocity utilities
+   */
+  @Autowired
+  public VelocityController(
+      VelocityEngine velocityEngine, ToolManager toolManager, TemplateTool templateTool) {
+    this.velocityEngine = velocityEngine;
+    this.toolManager = toolManager;
+    this.templateTool = templateTool;
+  }
 
-    /**
-     * Retrieves latest template with a list of arguments.
-     *
-     * @return latest template or new empty template
-     */
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Template getTemplate() {
-        var templatesRepository = StringResourceLoader.getRepository();
-        var templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
-        var template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        var parameters = templateTool.referenceSet(template);
-        return new Template(templateResource.getBody(), parameters);
-    }
+  /**
+   * Retrieves latest template with a list of arguments.
+   *
+   * @return latest template or new empty template
+   */
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Template getTemplate() {
+    var templatesRepository = StringResourceLoader.getRepository();
+    var templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
+    var template = velocityEngine.getTemplate(TEMPLATE_NAME);
+    var parameters = templateTool.referenceSet(template);
+    return new Template(templateResource.getBody(), parameters);
+  }
 
+  /**
+   * Sets the new template as well as new list of argument values.
+   *
+   * @param request request containing a new template with parameter values
+   * @return template engine application result
+   */
+  @PostMapping(
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
+    var maybeTemplateText = Optional.ofNullable(request.getTemplate());
+    maybeTemplateText.ifPresent(this::setTemplate);
+    var template = velocityEngine.getTemplate(TEMPLATE_NAME);
+    var toolContext = toolManager.createContext();
+    toolContext.putAll(request.getParameters());
+    var parameters = templateTool.referenceSet(template);
+    var writer = new StringWriter();
+    var conversionTime = System.nanoTime();
+    velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
+    conversionTime = System.nanoTime() - conversionTime;
+    return new RenderedTemplate(writer.toString(), parameters, conversionTime);
+  }
 
-    /**
-     * Sets the new template as well as new list of argument values.
-     *
-     * @param request request containing a new template with parameter values
-     * @return template engine application result
-     */
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
-        var maybeTemplateText = Optional.ofNullable(request.getTemplate());
-        maybeTemplateText.ifPresent(this::setTemplate);
-        var template = velocityEngine.getTemplate(TEMPLATE_NAME);
-        var toolContext = toolManager.createContext();
-        toolContext.putAll(request.getParameters());
-        var parameters = templateTool.referenceSet(template);
-        var writer = new StringWriter();
-        var conversionTime = System.nanoTime();
-        velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
-        conversionTime = System.nanoTime() - conversionTime;
-        return new RenderedTemplate(writer.toString(), parameters, conversionTime);
-    }
+  private void setTemplate(String template) {
+    StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
+    templatesRepository.putStringResource(TEMPLATE_NAME, template, "UTF-8");
+  }
 
-    private void setTemplate(String template) {
-        StringResourceRepository templatesRepository = StringResourceLoader.getRepository();
-        templatesRepository.putStringResource(TEMPLATE_NAME, template, "UTF-8");
-    }
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public Template handleAbsentTemplate() {
+    return Template.EMPTY;
+  }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public Template handleAbsentTemplate() {
-        return Template.EMPTY;
-    }
-
-    @ExceptionHandler({
-            ParseErrorException.class,
-            MethodInvocationException.class
-    })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleTemplateParseFailure() {
-    }
-
+  @ExceptionHandler({ParseErrorException.class, MethodInvocationException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public void handleTemplateParseFailure() {}
 }

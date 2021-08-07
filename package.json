@@ -11,17 +11,17 @@
     "angular-route": "^1.8.2",
     "angular-ui-bootstrap": "^2.5.6",
     "bootstrap": "^3.3.7",
-    "codemirror": "^5.58.2"
+    "codemirror": "^5.62.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.8.2",
     "braces": ">=2.3.1",
     "cpx": "^1.5.0",
     "http-server": "^0.12.3",
-    "jasmine-core": "^3.6.0",
-    "karma": "^5.2.3",
+    "jasmine-core": "^3.8.0",
+    "karma": "^6.3.4",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-firefox-launcher": "^2.1.0",
+    "karma-firefox-launcher": "^2.1.1",
     "karma-jasmine": "^4.0.1",
     "karma-junit-reporter": "^2.0.1",
     "protractor": "^7.0.0"

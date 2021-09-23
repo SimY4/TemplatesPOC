@@ -28,8 +28,8 @@ public class TemplateTool {
     var rootTreeNode = template.getRootTreeNode();
     for (var i = 0; i < rootTreeNode.getChildCount(); i++) {
       var templateModel = rootTreeNode.getChildNodes().get(i);
-      if (templateModel instanceof StringModel) {
-        processStringModel((StringModel) templateModel).ifPresent(result::add);
+      if (templateModel instanceof StringModel stringModel) {
+        processStringModel(stringModel).ifPresent(result::add);
       }
     }
     return result;
@@ -37,28 +37,21 @@ public class TemplateTool {
 
   private Optional<String> processStringModel(StringModel stringModel) {
     var wrappedObject = stringModel.getWrappedObject();
-    switch (wrappedObject.getClass().getSimpleName()) {
-      case "DollarVariable":
-        return processDollarVariable(wrappedObject);
-      default:
-        return Optional.empty();
-    }
+    return switch (wrappedObject.getClass().getSimpleName()) {
+      case "DollarVariable" -> processDollarVariable(wrappedObject);
+      default -> Optional.empty();
+    };
   }
 
   private Optional<String> processDollarVariable(Object dollarVariable) {
     var expression = getInternalState(dollarVariable, "expression");
-    switch (expression.getClass().getSimpleName()) {
-      case "Identifier":
-        return Optional.of(getInternalState(expression, "name").toString());
-      case "DefaultToExpression":
-        return Optional.of(getInternalState(expression, "lho").toString());
-      case "MethodCall":
-      case "BuiltinVariable":
-        return Optional.empty();
-      default:
-        throw new IllegalStateException(
-            "Unable to introspect variable " + expression + " of type " + expression.getClass());
-    }
+    return switch (expression.getClass().getSimpleName()) {
+      case "Identifier" -> Optional.of(getInternalState(expression, "name").toString());
+      case "DefaultToExpression" -> Optional.of(getInternalState(expression, "lho").toString());
+      case "MethodCall", "BuiltinVariable" -> Optional.empty();
+      default -> throw new IllegalStateException(
+          "Unable to introspect variable " + expression + " of type " + expression.getClass());
+    };
   }
 
   private Object getInternalState(Object o, String fieldName) {

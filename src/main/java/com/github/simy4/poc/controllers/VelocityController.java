@@ -77,11 +77,11 @@ public class VelocityController {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
-    var maybeTemplateText = Optional.ofNullable(request.getTemplate());
+    var maybeTemplateText = Optional.ofNullable(request.template());
     maybeTemplateText.ifPresent(this::setTemplate);
     var template = velocityEngine.getTemplate(TEMPLATE_NAME);
     var toolContext = toolManager.createContext();
-    toolContext.putAll(request.getParameters());
+    toolContext.putAll(request.parameters());
     var parameters = templateTool.referenceSet(template);
     var writer = new StringWriter();
     var conversionTime = System.nanoTime();

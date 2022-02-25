@@ -28,7 +28,7 @@
         <velocity-tools.version>3.1</velocity-tools.version>
 
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
-        <node.version>v16.12.0</node.version>
+        <node.version>v16.14.0</node.version>
 
         <spotless.version>2.21.0</spotless.version>
 
@@ -193,9 +193,10 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <showLogs>true</showLogs>
                     <useColor>true</useColor>
                     <verbose>true</verbose>
-                    <autoPull>always</autoPull>
+                    <imagePullPolicy>always</imagePullPolicy>
                 </configuration>
             </plugin>
         </plugins>

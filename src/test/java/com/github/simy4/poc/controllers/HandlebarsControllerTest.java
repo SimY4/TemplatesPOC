@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -23,7 +22,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class VelocityControllerTest {
+class HandlebarsControllerTest {
 
   @Autowired private WebApplicationContext webApplicationContext;
 
@@ -37,7 +36,7 @@ class VelocityControllerTest {
   @Test
   void testGetTemplateNoTemplate() throws Exception {
     mockMvc
-        .perform(get("/velocity"))
+        .perform(get("/handlebars"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
@@ -46,14 +45,13 @@ class VelocityControllerTest {
   void testUpdateTemplateDollarVariable() throws Exception {
     mockMvc
         .perform(
-            post("/velocity")
+            post("/handlebars")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    """
-                    { "template": "template $foo, $!bar, ${foo}, $!{bar}" }"""))
+                .content("""
+                    { "template": "template {{foo}}, {{&bar}}" }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.template", is("template $foo, , ${foo}, ")))
+        .andExpect(jsonPath("$.template", is("template , ")))
         .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
   }
 
@@ -61,41 +59,27 @@ class VelocityControllerTest {
   void testUpdateTemplateDollarVariableWithParameterValues() throws Exception {
     mockMvc
         .perform(
-            post("/velocity")
+            post("/handlebars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    { "template": "template $foo, $!bar, ${foo}, $!{bar}"
+                    { "template": "template {{foo}}, {{&bar}}"
                     , "parameters": {"foo": "foo", "bar": "bar" }
                     }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.template", is("template foo, bar, foo, bar")))
+        .andExpect(jsonPath("$.template", is("template foo, bar")))
         .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")));
-  }
-
-  @Test
-  void testUpdateTemplateSet() throws Exception {
-    mockMvc
-        .perform(
-            post("/velocity")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    { "template": "template #set($foo = 'test')" }"""))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.template", is("template ")))
-        .andExpect(jsonPath("$.parameters", empty()));
   }
 
   @Test
   void testUpdateTemplateBadTemplate() throws Exception {
     mockMvc
         .perform(
-            post("/velocity")
+            post("/handlebars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    { "template": "template ${foo" }"""))
+                    { "template": "template {{foo" }"""))
         .andExpect(status().isBadRequest());
   }
 }

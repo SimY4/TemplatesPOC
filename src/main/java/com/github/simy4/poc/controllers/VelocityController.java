@@ -77,8 +77,7 @@ public class VelocityController {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
-    var maybeTemplateText = Optional.ofNullable(request.template());
-    maybeTemplateText.ifPresent(this::setTemplate);
+    Optional.ofNullable(request.template()).ifPresent(this::setTemplate);
     var template = velocityEngine.getTemplate(TEMPLATE_NAME, "UTF-8");
     var toolContext = toolManager.createContext();
     toolContext.putAll(request.parameters());

@@ -13,6 +13,10 @@ angular.module('templates')
                 controller: 'CommonController',
                 templateUrl: '/views/template.html',
                 templateService: 'FreemarkerService'
+            }).when('/handlebars', {
+                controller: 'CommonController',
+                templateUrl: '/views/template.html',
+                templateService: 'HandlebarsService'
             }).otherwise({
                 redirectTo: '/'
             });

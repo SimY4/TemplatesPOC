@@ -1,5 +1,6 @@
 package com.github.simy4.poc;
 
+import com.github.jknack.handlebars.Handlebars;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -66,5 +67,11 @@ public class TemplatesPocApplication {
     configuration.setTemplateLoader(templateLoader);
     configuration.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
     return configuration;
+  }
+
+  // Handlebars
+  @Bean
+  public Handlebars handlebars() {
+    return new Handlebars();
   }
 }

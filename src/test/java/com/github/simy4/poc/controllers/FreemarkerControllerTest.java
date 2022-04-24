@@ -47,7 +47,8 @@ class FreemarkerControllerTest {
         .perform(
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"template\":\"template ${foo}, ${bar!''}\"}"))
+                .content("""
+                    { "template": "template ${foo}, ${bar!''}" }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.template", is("template , ")))
@@ -61,8 +62,10 @@ class FreemarkerControllerTest {
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
-                    "{\"template\":\"template ${foo}, ${bar!''}\", "
-                        + "\"parameters\": {\"foo\":\"foo\", \"bar\":\"bar\"}}"))
+                    """
+                    { "template": "template ${foo}, ${bar!''}"
+                    , "parameters": { "foo": "foo", "bar": "bar"}
+                    }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.template", is("template foo, bar")))
@@ -75,7 +78,8 @@ class FreemarkerControllerTest {
         .perform(
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"template\":\"template ${olo\"}"))
+                .content("""
+                    {"template": "template ${olo" }"""))
         .andExpect(status().isBadRequest());
   }
 }

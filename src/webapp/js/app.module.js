@@ -4,5 +4,6 @@ angular.module('templates', [
     'ui.bootstrap',
     'ngRoute',
     'templates.velocity',
-    'templates.freemarker'
+    'templates.freemarker',
+    'templates.handlebars'
 ]);

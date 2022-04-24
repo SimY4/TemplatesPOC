@@ -82,8 +82,7 @@ public class FreemarkerController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request)
       throws IOException, TemplateException {
-    var maybeTemplateText = Optional.ofNullable(request.template());
-    maybeTemplateText.ifPresent(this::setTemplate);
+    Optional.ofNullable(request.template()).ifPresent(this::setTemplate);
     var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
     var parameters = templateTool.referenceSet(template);
     var writer = new StringWriter();

@@ -69,7 +69,8 @@ public class TemplatesPocApplication {
     return configuration;
   }
 
-  // Handlebars
+  // Handlebars template POC dependencies
+
   @Bean
   public Handlebars handlebars() {
     return new Handlebars();

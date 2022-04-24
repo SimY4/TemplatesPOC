@@ -5,8 +5,8 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.HandlebarsException;
 import com.github.jknack.handlebars.TagType;
 import com.github.simy4.poc.model.RenderTemplate;
-import com.github.simy4.poc.model.RenderedTemplate;
 import com.github.simy4.poc.model.Template;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -69,11 +69,11 @@ public class HandlebarsController {
    * @param request request containing a new template with parameter values
    * @return template engine application result
    */
+  @Timed("handlebars.template.update")
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request)
-      throws IOException {
+  public Template updateTemplate(@RequestBody @Valid RenderTemplate request) throws IOException {
     Optional.ofNullable(request.template()).ifPresent(this::setTemplate);
     var template = templateStore.get();
     var context = Context.newContext(request.parameters());
@@ -81,10 +81,8 @@ public class HandlebarsController {
         Set.copyOf(
             template.collect(TagType.VAR, TagType.STAR_VAR, TagType.AMP_VAR, TagType.TRIPLE_VAR));
     var writer = new StringWriter();
-    var conversionTime = System.nanoTime();
     template.apply(context, writer);
-    conversionTime = System.nanoTime() - conversionTime;
-    return new RenderedTemplate(writer.toString(), parameters, conversionTime);
+    return new Template(writer.toString(), parameters);
   }
 
   private void setTemplate(String template) {

@@ -1,9 +1,9 @@
 package com.github.simy4.poc.controllers;
 
 import com.github.simy4.poc.model.RenderTemplate;
-import com.github.simy4.poc.model.RenderedTemplate;
 import com.github.simy4.poc.model.Template;
 import com.github.simy4.poc.velocity.TemplateTool;
+import io.micrometer.core.annotation.Timed;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
@@ -73,20 +73,19 @@ public class VelocityController {
    * @param request request containing a new template with parameter values
    * @return template engine application result
    */
+  @Timed("velocity.template.update")
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
+  public Template updateTemplate(@RequestBody @Valid RenderTemplate request) {
     Optional.ofNullable(request.template()).ifPresent(this::setTemplate);
     var template = velocityEngine.getTemplate(TEMPLATE_NAME, "UTF-8");
     var toolContext = toolManager.createContext();
     toolContext.putAll(request.parameters());
     var parameters = templateTool.referenceSet(template);
     var writer = new StringWriter();
-    var conversionTime = System.nanoTime();
     template.merge(toolContext, writer);
-    conversionTime = System.nanoTime() - conversionTime;
-    return new RenderedTemplate(writer.toString(), parameters, conversionTime);
+    return new Template(writer.toString(), parameters);
   }
 
   private void setTemplate(String template) {

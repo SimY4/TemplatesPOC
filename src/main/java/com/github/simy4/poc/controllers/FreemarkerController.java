@@ -2,7 +2,6 @@ package com.github.simy4.poc.controllers;
 
 import com.github.simy4.poc.freemarker.TemplateTool;
 import com.github.simy4.poc.model.RenderTemplate;
-import com.github.simy4.poc.model.RenderedTemplate;
 import com.github.simy4.poc.model.Template;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.core.ParseException;
@@ -10,6 +9,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateNotFoundException;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -77,19 +77,18 @@ public class FreemarkerController {
    * @throws IOException should never happen.
    * @throws TemplateException on malformed template or inconsistent arguments.
    */
+  @Timed("freemarker.template.update")
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request)
+  public Template updateTemplate(@RequestBody @Valid RenderTemplate request)
       throws IOException, TemplateException {
     Optional.ofNullable(request.template()).ifPresent(this::setTemplate);
     var template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME);
     var parameters = templateTool.referenceSet(template);
     var writer = new StringWriter();
-    var conversionTime = System.nanoTime();
     template.process(request.parameters(), writer);
-    conversionTime = System.nanoTime() - conversionTime;
-    return new RenderedTemplate(writer.toString(), parameters, conversionTime);
+    return new Template(writer.toString(), parameters);
   }
 
   private void setTemplate(String template) {

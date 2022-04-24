@@ -25,7 +25,6 @@ angular.module('templates.common').controller('CommonController',
 
             $scope.parameters = [];
             $scope.context = [];
-            $scope.conversionTime = -1;
 
             $scope.addParameter = function (parameter) {
                 var paramIndex = $scope.parameters.indexOf(parameter);
@@ -76,7 +75,6 @@ angular.module('templates.common').controller('CommonController',
             });
 
             function updateTemplate(editorInstance, templateDetails) {
-                $scope.conversionTime = templateDetails.conversionTime;
                 $scope.context = $scope.context.filter(function (i) {
                     return templateDetails.parameters.indexOf(i.paramName) > -1
                 });

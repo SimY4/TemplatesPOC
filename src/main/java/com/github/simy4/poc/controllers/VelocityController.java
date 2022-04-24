@@ -62,7 +62,7 @@ public class VelocityController {
   public Template getTemplate() {
     var templatesRepository = StringResourceLoader.getRepository();
     var templateResource = templatesRepository.getStringResource(TEMPLATE_NAME);
-    var template = velocityEngine.getTemplate(TEMPLATE_NAME);
+    var template = velocityEngine.getTemplate(TEMPLATE_NAME, "UTF-8");
     var parameters = templateTool.referenceSet(template);
     return new Template(templateResource.getBody(), parameters);
   }
@@ -79,13 +79,13 @@ public class VelocityController {
   public RenderedTemplate updateTemplate(@RequestBody @Valid RenderTemplate request) {
     var maybeTemplateText = Optional.ofNullable(request.template());
     maybeTemplateText.ifPresent(this::setTemplate);
-    var template = velocityEngine.getTemplate(TEMPLATE_NAME);
+    var template = velocityEngine.getTemplate(TEMPLATE_NAME, "UTF-8");
     var toolContext = toolManager.createContext();
     toolContext.putAll(request.parameters());
     var parameters = templateTool.referenceSet(template);
     var writer = new StringWriter();
     var conversionTime = System.nanoTime();
-    velocityEngine.mergeTemplate(TEMPLATE_NAME, "UTF-8", toolContext, writer);
+    template.merge(toolContext, writer);
     conversionTime = System.nanoTime() - conversionTime;
     return new RenderedTemplate(writer.toString(), parameters, conversionTime);
   }

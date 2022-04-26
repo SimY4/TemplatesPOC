@@ -39,7 +39,6 @@ public class HandlebarsController {
    * Constructor.
    *
    * @param handlebars handlebars template engine
-   * @param templateTool velocity utilities
    */
   @Autowired
   public HandlebarsController(Handlebars handlebars) {
@@ -56,10 +55,8 @@ public class HandlebarsController {
   public Template getTemplate() {
     return Optional.ofNullable(templateStore.get())
         .map(
-            template -> {
-              return new Template(
-                  template.text(), Set.copyOf(template.collectReferenceParameters()));
-            })
+            template ->
+                new Template(template.text(), Set.copyOf(template.collectReferenceParameters())))
         .orElse(Template.EMPTY);
   }
 

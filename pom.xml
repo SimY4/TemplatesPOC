@@ -32,7 +32,7 @@
 
     <spotless.version>2.22.5</spotless.version>
 
-    <docker-maven-plugin.version>0.39.1</docker-maven-plugin.version>
+    <docker-maven-plugin.version>0.40.0</docker-maven-plugin.version>
   </properties>
 
   <dependencies>

@@ -25,7 +25,7 @@
     <springdoc-openapi.version>1.6.12</springdoc-openapi.version>
     <velocity.version>2.3</velocity.version>
     <velocity-tools.version>3.1</velocity-tools.version>
-    <handlebars.version>4.3.0</handlebars.version>
+    <handlebars.version>4.3.1</handlebars.version>
 
     <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
     <node.version>v14.19.1</node.version>

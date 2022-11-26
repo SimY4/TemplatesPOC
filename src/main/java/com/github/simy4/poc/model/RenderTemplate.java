@@ -1,8 +1,7 @@
 package com.github.simy4.poc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Map;
 

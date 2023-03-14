@@ -181,7 +181,14 @@
           </execution>
         </executions>
       </plugin>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+          <!-- no need to upload Maven artifacts, just Docker images -->
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
@@ -237,31 +244,36 @@
         <artifactId>docker-maven-plugin</artifactId>
         <version>${docker-maven-plugin.version}</version>
         <configuration>
-          <showLogs>true</showLogs>
           <useColor>true</useColor>
           <verbose>true</verbose>
           <imagePullPolicy>always</imagePullPolicy>
+          <images>
+            <image>
+              <name>com.github.simy4.poc/templates</name>
+              <build>
+                <dockerFileDir>${project.basedir}</dockerFileDir>
+                <filter>@</filter>
+                <tags>
+                  <tag>latest</tag>
+                </tags>
+              </build>
+            </image>
+          </images>
         </configuration>
         <executions>
           <execution>
+            <id>docker-build</id>
             <goals>
               <goal>build</goal>
             </goals>
             <phase>install</phase>
-            <configuration>
-              <images>
-                <image>
-                  <name>com.github.simy4.poc/templates</name>
-                  <build>
-                    <dockerFileDir>${project.basedir}</dockerFileDir>
-                    <filter>@</filter>
-                    <tags>
-                      <tag>latest</tag>
-                    </tags>
-                  </build>
-                </image>
-              </images>
-            </configuration>
+          </execution>
+          <execution>
+            <id>docker-push</id>
+            <goals>
+              <goal>push</goal>
+            </goals>
+            <phase>deploy</phase>
           </execution>
         </executions>
       </plugin>

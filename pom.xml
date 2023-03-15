@@ -22,7 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
 
-    <springdoc-openapi.version>1.6.15</springdoc-openapi.version>
+    <springdoc-openapi.version>2.0.4</springdoc-openapi.version>
     <velocity.version>2.3</velocity.version>
     <velocity-tools.version>3.1</velocity-tools.version>
     <handlebars.version>4.3.1</handlebars.version>
@@ -51,7 +51,7 @@
 
     <dependency>
       <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>${springdoc-openapi.version}</version>
     </dependency>
 

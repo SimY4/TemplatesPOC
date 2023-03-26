@@ -5,16 +5,16 @@
   "description": "Templating UI POC",
   "repository": "https://github.com/SimY4/TemplatesPOC",
   "dependencies": {
-    "angular": "^1.8.2",
-    "angular-loader": "^1.8.2",
-    "angular-resource": "^1.8.2",
-    "angular-route": "^1.8.2",
+    "angular": "^1.8.3",
+    "angular-loader": "^1.8.3",
+    "angular-resource": "^1.8.3",
+    "angular-route": "^1.8.3",
     "angular-ui-bootstrap": "^2.5.6",
     "bootstrap": "^3.3.7",
-    "codemirror": "^5.63.0"
+    "codemirror": "^5.65.12"
   },
   "devDependencies": {
-    "angular-mocks": "^1.8.2",
+    "angular-mocks": "^1.8.3",
     "braces": ">=3.0.2",
     "cpx": "^1.5.0",
     "http-server": "^13.0.2",

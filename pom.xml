@@ -48,6 +48,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
 
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -119,6 +124,7 @@
             <enabled>true</enabled>
           </layers>
           <classifier>exec</classifier>
+          <excludeDevtools>true</excludeDevtools>
         </configuration>
       </plugin>
       <plugin>

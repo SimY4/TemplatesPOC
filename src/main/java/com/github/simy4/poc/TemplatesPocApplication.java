@@ -61,7 +61,7 @@ public class TemplatesPocApplication {
    */
   @Bean
   public Configuration freeMarkerConfiguration(StringTemplateLoader templateLoader) {
-    var configuration = new Configuration(Configuration.VERSION_2_3_30);
+    var configuration = new Configuration(Configuration.VERSION_2_3_32);
     configuration.setDefaultEncoding("UTF-8");
     configuration.setTemplateUpdateDelayMilliseconds(0L);
     configuration.setTemplateLoader(templateLoader);

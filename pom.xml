@@ -30,7 +30,7 @@
     <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
     <node.version>v14.19.1</node.version>
 
-    <spotless.version>2.37.0</spotless.version>
+    <spotless.version>2.38.0</spotless.version>
 
     <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
   </properties>

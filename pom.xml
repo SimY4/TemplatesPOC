@@ -20,7 +20,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>17</java.version>
+    <kotlin.version>1.9.10</kotlin.version>
+    <kotlin.compiler.languageVersion>1.9</kotlin.compiler.languageVersion>
+    <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
 
     <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
     <velocity.version>2.3</velocity.version>
@@ -35,7 +37,28 @@
     <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-bom</artifactId>
+        <version>${kotlin.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-reflect</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -47,6 +70,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-kotlin</artifactId>
     </dependency>
 
     <dependency>
@@ -112,6 +139,30 @@
 
     <plugins>
       <plugin>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
+        <configuration>
+          <args>
+            <arg>-Xjsr305=strict</arg>
+          </args>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
@@ -120,16 +171,6 @@
           </layers>
           <classifier>exec</classifier>
           <excludeDevtools>true</excludeDevtools>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <compilerArgs>
-            <arg>-Xlint:all</arg>
-            <arg>-Werror</arg>
-          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
@@ -216,21 +257,14 @@
               <expandEmptyElements>false</expandEmptyElements>
             </sortPom>
           </pom>
-          <java>
+          <kotlin>
             <includes>
-              <include>src/main/java/**/*.java</include>
-              <include>src/test/java/**/*.java</include>
-              <include>src/it/java/**/*.java</include>
+              <include>src/main/kotlin/**/*.kt</include>
+              <include>src/test/kotlin/**/*.kt</include>
+              <include>src/it/kotlin/**/*.kt</include>
             </includes>
-
-            <googleJavaFormat/>
-            <trimTrailingWhitespace/>
-            <removeUnusedImports/>
-
-            <importOrder>
-              <order>,javax,java,\#,\#javax,\#java</order>
-            </importOrder>
-          </java>
+            <ktfmt/>
+          </kotlin>
         </configuration>
         <executions>
           <execution>
@@ -279,6 +313,8 @@
         </executions>
       </plugin>
     </plugins>
+    <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
   </build>
 
   <profiles>

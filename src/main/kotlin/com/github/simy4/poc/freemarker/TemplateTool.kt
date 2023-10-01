@@ -15,11 +15,11 @@ class TemplateTool {
       template.rootTreeNode.let { rootTreeNode ->
         (0..rootTreeNode.childCount)
             .mapNotNull { i ->
-              val templateModel = rootTreeNode.childNodes[i]
-              if (templateModel is StringModel) {
-                processStringModel(templateModel)
-              } else {
-                null
+              rootTreeNode.childNodes[i].let { templateModel ->
+                when (templateModel) {
+                  is StringModel -> processStringModel(templateModel)
+                  else -> null
+                }
               }
             }
             .toSet()

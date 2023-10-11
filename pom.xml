@@ -22,7 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kotlin.version>1.9.10</kotlin.version>
     <kotlin.compiler.languageVersion>1.9</kotlin.compiler.languageVersion>
-    <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
+    <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
 
     <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
     <velocity.version>2.3</velocity.version>

@@ -3,7 +3,8 @@
 angular.module('templates', [
     'ui.bootstrap',
     'ngRoute',
-    'templates.velocity',
     'templates.freemarker',
-    'templates.handlebars'
+    'templates.handlebars',
+    'templates.pebble',
+    'templates.velocity'
 ]);

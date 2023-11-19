@@ -5,11 +5,7 @@ angular.module('templates')
         function ($routeProvider, $locationProvider, $httpProvider) {
 
             /* Register view routing */
-            $routeProvider.when('/velocity', {
-                controller: 'CommonController',
-                templateUrl: '/views/template.html',
-                templateService: 'VelocityService'
-            }).when('/freemarker', {
+            $routeProvider.when('/freemarker', {
                 controller: 'CommonController',
                 templateUrl: '/views/template.html',
                 templateService: 'FreemarkerService'
@@ -17,6 +13,14 @@ angular.module('templates')
                 controller: 'CommonController',
                 templateUrl: '/views/template.html',
                 templateService: 'HandlebarsService'
+            }).when('/pebble', {
+                controller: 'CommonController',
+                templateUrl: '/views/template.html',
+                templateService: 'PebbleService'
+            }).when('/velocity', {
+                controller: 'CommonController',
+                templateUrl: '/views/template.html',
+                templateService: 'VelocityService'
             }).otherwise({
                 redirectTo: '/'
             });

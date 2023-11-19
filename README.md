@@ -8,4 +8,5 @@ Web form for various templating engines testing POC. Based on Spring Boot + Boot
 | Apache Velocity | ✅             | ✅                      |
 | Freemarker      | ✅             | meh                    |
 | Handlebars      | ✅             | ✅                      |
+| Pebble          | ✅             | meh                    |
 

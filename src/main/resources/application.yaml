@@ -1,4 +1,6 @@
-spring.application.name: @project.name@
+spring:
+  application.name: @project.name@
+  threads.virtual.enabled: true
 
 server:
   port: 9000

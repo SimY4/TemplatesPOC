@@ -1,4 +1,4 @@
-package com.github.simy4.poc.freemarker
+package com.github.simy4.poc.mustache
 
 import org.hamcrest.Matchers.hasItems
 import org.hamcrest.Matchers.`is`
@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class FreemarkerControllerTest {
+class ControllerTest {
 
   @Autowired lateinit var webApplicationContext: WebApplicationContext
 
@@ -35,18 +35,18 @@ class FreemarkerControllerTest {
   @Test
   fun testGetTemplateNoTemplate() {
     mockMvc
-        .perform(get("/freemarker"))
+        .perform(get("/mustache"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
   }
 
   @Test
-  fun testUpdateTemplateDollarVariable() {
+  fun testUpdateTemplateVariable() {
     mockMvc
         .perform(
-            post("/freemarker")
+            post("/mustache")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{ "template": "template ${"$"}{foo}, ${"$"}{bar!''}" }"""))
+                .content("""{ "template": "template {{foo}}, {{&bar}}" }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.template", `is`("template , ")))
@@ -54,15 +54,15 @@ class FreemarkerControllerTest {
   }
 
   @Test
-  fun testUpdateTemplateDollarVariableWithParameterValues() {
+  fun testUpdateTemplateVariableWithParameterValues() {
     mockMvc
         .perform(
-            post("/freemarker")
+            post("/mustache")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    { "template": "template ${"$"}{foo}, ${"$"}{bar!''}"
-                    , "parameters": { "foo": "foo", "bar": "bar"}
+                    { "template": "template {{foo}}, {{&bar}}"
+                    , "parameters": {"foo": "foo", "bar": "bar" }
                     }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -74,9 +74,9 @@ class FreemarkerControllerTest {
   fun testUpdateTemplateBadTemplate() {
     mockMvc
         .perform(
-            post("/freemarker")
+            post("/mustache")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"template": "template ${"$"}{olo" }"""))
+                .content("""{ "template": "template {{foo" }"""))
         .andExpect(status().isBadRequest())
   }
 }

@@ -1,6 +1,5 @@
-package com.github.simy4.poc.velocity
+package com.github.simy4.poc.handlebars
 
-import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasItems
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.BeforeEach
@@ -22,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class VelocityControllerTest {
+class ControllerTest {
 
   @Autowired lateinit var webApplicationContext: WebApplicationContext
 
@@ -36,61 +35,48 @@ class VelocityControllerTest {
   @Test
   fun testGetTemplateNoTemplate() {
     mockMvc
-        .perform(get("/velocity"))
+        .perform(get("/handlebars"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
   }
 
   @Test
-  fun testUpdateTemplateDollarVariable() {
+  fun testUpdateTemplateVariable() {
     mockMvc
         .perform(
-            post("/velocity")
+            post("/handlebars")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{ "template": "template ${"$"}foo, $!bar, ${"$"}{foo}, $!{bar}" }"""))
+                .content("""{ "template": "template {{foo}}, {{&bar}}" }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.template", `is`("template \$foo, , \${foo}, ")))
+        .andExpect(jsonPath("$.template", `is`("template , ")))
         .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")))
   }
 
   @Test
-  fun testUpdateTemplateDollarVariableWithParameterValues() {
+  fun testUpdateTemplateVariableWithParameterValues() {
     mockMvc
         .perform(
-            post("/velocity")
+            post("/handlebars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    { "template": "template ${"$"}foo, $!bar, ${"$"}{foo}, $!{bar}"
+                    { "template": "template {{foo}}, {{&bar}}"
                     , "parameters": {"foo": "foo", "bar": "bar" }
                     }"""))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.template", `is`("template foo, bar, foo, bar")))
+        .andExpect(jsonPath("$.template", `is`("template foo, bar")))
         .andExpect(jsonPath("$.parameters", hasItems("foo", "bar")))
-  }
-
-  @Test
-  fun testUpdateTemplateSet() {
-    mockMvc
-        .perform(
-            post("/velocity")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""{ "template": "template #set(${"$"}foo = 'test')" }"""))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.template", `is`("template ")))
-        .andExpect(jsonPath("$.parameters", empty<Any>()))
   }
 
   @Test
   fun testUpdateTemplateBadTemplate() {
     mockMvc
         .perform(
-            post("/velocity")
+            post("/handlebars")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""{ "template": "template ${"$"}{foo" }"""))
+                .content("""{ "template": "template {{foo" }"""))
         .andExpect(status().isBadRequest())
   }
 }

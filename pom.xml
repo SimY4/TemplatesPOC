@@ -25,7 +25,9 @@
     <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
 
     <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
+
     <handlebars.version>4.3.1</handlebars.version>
+    <mustache.version>0.9.11</mustache.version>
     <pebble.version>3.2.1</pebble.version>
     <velocity.version>2.3</velocity.version>
     <velocity-tools.version>3.1</velocity-tools.version>
@@ -92,6 +94,12 @@
       <groupId>com.github.jknack</groupId>
       <artifactId>handlebars</artifactId>
       <version>${handlebars.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.spullara.mustache.java</groupId>
+      <artifactId>compiler</artifactId>
+      <version>${mustache.version}</version>
     </dependency>
 
     <dependency>
@@ -210,6 +218,10 @@
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
+        <configuration>
+          <nodeVersion>${node.version}</nodeVersion>
+          <workingDirectory>src/main/webapp</workingDirectory>
+        </configuration>
         <executions>
           <execution>
             <id>install node and npm</id>
@@ -217,9 +229,6 @@
               <goal>install-node-and-npm</goal>
             </goals>
             <phase>generate-resources</phase>
-            <configuration>
-              <nodeVersion>${node.version}</nodeVersion>
-            </configuration>
           </execution>
           <execution>
             <id>npm install</id>

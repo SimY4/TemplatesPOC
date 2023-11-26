@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('templates.freemarker', [
+angular.module('templates.mustache', [
     'ngResource',
     'templates.common'
 ]);

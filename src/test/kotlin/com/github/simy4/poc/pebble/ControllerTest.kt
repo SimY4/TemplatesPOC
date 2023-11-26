@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class PebbleControllerTest {
+class ControllerTest {
 
   @Autowired lateinit var webApplicationContext: WebApplicationContext
 

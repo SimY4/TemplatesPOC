@@ -13,6 +13,10 @@ angular.module('templates')
                 controller: 'CommonController',
                 templateUrl: '/views/template.html',
                 templateService: 'HandlebarsService'
+            }).when('/mustache', {
+                controller: 'CommonController',
+                templateUrl: '/views/template.html',
+                templateService: 'MustacheService'
             }).when('/pebble', {
                 controller: 'CommonController',
                 templateUrl: '/views/template.html',

@@ -22,10 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
-/** Handlebars template engine REST controller. */
-@RestController
+@RestController("handlebarsController")
 @RequestMapping("/handlebars")
-open class HandlebarsController(private val handlebars: Handlebars) {
+open class Controller(private val handlebars: Handlebars) {
   private val templateStore: AtomicReference<HandlebarsTemplate?> = AtomicReference(null)
 
   @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])

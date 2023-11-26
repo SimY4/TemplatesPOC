@@ -5,6 +5,7 @@ angular.module('templates', [
     'ngRoute',
     'templates.freemarker',
     'templates.handlebars',
+    'templates.mustache',
     'templates.pebble',
     'templates.velocity'
 ]);

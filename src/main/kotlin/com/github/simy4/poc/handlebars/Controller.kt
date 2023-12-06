@@ -31,8 +31,7 @@ open class Controller(private val handlebars: Handlebars) {
   open fun getTemplate(): Template =
       templateStore.get()?.let { template ->
         Template(template.text(), template.collectReferenceParameters().toSet())
-      }
-          ?: Template.EMPTY
+      } ?: Template.EMPTY
 
   @Timed("handlebars.template.update")
   @PostMapping(

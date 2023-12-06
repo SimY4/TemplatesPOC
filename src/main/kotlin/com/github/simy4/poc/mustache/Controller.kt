@@ -38,8 +38,7 @@ open class Controller(private val mustache: MustacheFactory) {
           template.identity(writer)
           Template(writer.toString(), template.codes.parameters())
         }
-      }
-          ?: Template.EMPTY
+      } ?: Template.EMPTY
 
   @Timed("mustache.template.update")
   @PostMapping(

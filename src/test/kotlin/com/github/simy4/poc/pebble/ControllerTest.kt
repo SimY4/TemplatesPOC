@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class ControllerTest: IntegrationTest() {
+class ControllerTest : IntegrationTest() {
   @Test
   fun testGetTemplateNoTemplate() {
     mockMvc

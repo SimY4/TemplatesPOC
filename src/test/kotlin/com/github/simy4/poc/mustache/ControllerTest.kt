@@ -11,15 +11,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class ControllerTest: IntegrationTest() {
+class ControllerTest : IntegrationTest() {
   @Test
   fun testGetTemplateNoTemplate() {
     mockMvc
         .perform(get("/mustache"))
-        .andExpectAll(
-          status().isOk(),
-          content().contentType(MediaType.APPLICATION_JSON)
-        )
+        .andExpectAll(status().isOk(), content().contentType(MediaType.APPLICATION_JSON))
   }
 
   @Test
@@ -30,11 +27,10 @@ class ControllerTest: IntegrationTest() {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""{ "template": "template {{foo}}, {{&bar}}" }"""))
         .andExpectAll(
-          status().isOk(),
-          content().contentType(MediaType.APPLICATION_JSON),
-          jsonPath("$.template", `is`("template , ")),
-          jsonPath("$.parameters", hasItems("foo", "bar"))
-        )
+            status().isOk(),
+            content().contentType(MediaType.APPLICATION_JSON),
+            jsonPath("$.template", `is`("template , ")),
+            jsonPath("$.parameters", hasItems("foo", "bar")))
   }
 
   @Test
@@ -49,11 +45,10 @@ class ControllerTest: IntegrationTest() {
                     , "parameters": {"foo": "foo", "bar": "bar" }
                     }"""))
         .andExpectAll(
-          status().isOk(),
-          content().contentType(MediaType.APPLICATION_JSON),
-          jsonPath("$.template", `is`("template foo, bar")),
-          jsonPath("$.parameters", hasItems("foo", "bar"))
-        )
+            status().isOk(),
+            content().contentType(MediaType.APPLICATION_JSON),
+            jsonPath("$.template", `is`("template foo, bar")),
+            jsonPath("$.parameters", hasItems("foo", "bar")))
   }
 
   @Test

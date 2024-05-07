@@ -17,4 +17,4 @@ logging:
 management.server.port: 9001
 
 springdoc:
-  packages-to-scan: com.github.simy4.poc.controllers
+  packages-to-scan: com.github.simy4.poc

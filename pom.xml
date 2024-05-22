@@ -20,8 +20,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <kotlin.version>1.9.24</kotlin.version>
-    <kotlin.compiler.languageVersion>1.9</kotlin.compiler.languageVersion>
+    <kotlin.version>2.0.0</kotlin.version>
+    <kotlin.compiler.languageVersion>2.0</kotlin.compiler.languageVersion>
     <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
 
     <springdoc-openapi.version>2.5.0</springdoc-openapi.version>

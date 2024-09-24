@@ -1,6 +1,7 @@
 package com.github.simy4.poc.velocity
 
 import org.apache.velocity.Template
+import org.apache.velocity.runtime.parser.node.ASTNegateNode
 import org.apache.velocity.runtime.parser.node.ASTReference
 import org.apache.velocity.runtime.parser.node.ASTSetDirective
 import org.apache.velocity.runtime.parser.node.Node
@@ -35,5 +36,7 @@ class TemplateTool(toolManager: ToolManager) {
       }
       return super.visit(node, referenceSet)
     }
+
+    override fun visit(node: ASTNegateNode, data: Any): Any = node.childrenAccept(this, data)
   }
 }

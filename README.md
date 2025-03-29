@@ -1,5 +1,5 @@
 # TemplatesPOC
-Web form for various templating engines testing POC. Based on Spring Boot + Bootstrap + AngularJS
+Web form for various templating engines testing POC. Based on Spring Boot + HTMX + PicoCSS
 
 ## Analysis
 
@@ -10,4 +10,3 @@ Web form for various templating engines testing POC. Based on Spring Boot + Boot
 | Handlebars      | ✅             | ✅                      |
 | Mustache.Java   | ✅             | ✅                      |
 | Pebble          | ✅             | meh                    |
-

@@ -1,7 +1,6 @@
 .idea/
 node/
 node_modules/
-src/webapp/lib/
-src/main/resources/static
 target/
 *.iml
+*.log

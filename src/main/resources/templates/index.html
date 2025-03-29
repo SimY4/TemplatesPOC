@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Template POC</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><strong>Template POC</strong></li>
+      </ul>
+      <ul>
+        <li>
+          <a th:href="@{/freemarker}" th:classappend="${template == 'freemarker' ? 'contrast' : 'secondary'}"
+            >Freemarker</a
+          >
+        </li>
+        <li>
+          <a th:href="@{/handlebars}" th:classappend="${template == 'handlebars' ? 'contrast' : 'secondary'}"
+            >Handlebars</a
+          >
+        </li>
+        <li>
+          <a th:href="@{/mustache}" th:classappend="${template == 'mustache' ? 'contrast' : 'secondary'}">Mustache</a>
+        </li>
+        <li>
+          <a th:href="@{/pebble}" th:classappend="${template == 'pebble' ? 'contrast' : 'secondary'}">Pebble</a>
+        </li>
+        <li>
+          <a th:href="@{/velocity}" th:classappend="${template == 'velocity' ? 'contrast' : 'secondary'}">Velocity</a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="container">
+      <article>
+        <form method="post">
+          <fieldset class="grid">
+            <textarea
+              id="template"
+              name="template"
+              rows="20"
+              aria-label="Source template"
+              th:hx-post="@{/{template}(template=${template})}"
+              hx-trigger="keyup changed delay:500ms"
+              hx-target="#result"
+              required
+            ></textarea>
+            <div id="result" th:insert="~{result}" class="grid"></div>
+          </fieldset>
+        </form>
+      </article>
+    </main>
+  </body>
+</html>

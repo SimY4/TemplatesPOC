@@ -5,7 +5,7 @@ import freemarker.template.TemplateExceptionHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-@Configuration("freeMarkerConfig")
+@Configuration("freemarkerConfig")
 open class Config {
   @Bean open fun templateLoader(): StringTemplateLoader = StringTemplateLoader()
 

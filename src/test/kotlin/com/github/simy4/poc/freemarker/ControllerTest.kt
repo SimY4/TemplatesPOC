@@ -1,36 +1,28 @@
 package com.github.simy4.poc.freemarker
 
 import com.github.simy4.poc.IntegrationTest
-import org.hamcrest.Matchers.hasItems
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.both
+import org.hamcrest.Matchers.hasEntry
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.model
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.util.MultiValueMap
 
 class ControllerTest : IntegrationTest() {
-  @Test
-  fun testGetTemplateNoTemplate() {
-    mockMvc
-        .perform(get("/freemarker"))
-        .andExpectAll(status().isOk(), content().contentType(MediaType.APPLICATION_JSON))
-  }
-
   @Test
   fun testUpdateTemplateDollarVariable() {
     mockMvc
         .perform(
             post("/freemarker")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""{ "template": "template ${"$"}{foo}, ${"$"}{bar!''}" }"""))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .formField("template", "template ${"$"}{foo}, ${"$"}{bar!''}"))
         .andExpectAll(
             status().isOk(),
-            content().contentType(MediaType.APPLICATION_JSON),
-            jsonPath("$.template", `is`("template , ")),
-            jsonPath("$.parameters", hasItems("foo", "bar")))
+            model().attribute("template", "freemarker"),
+            model().attribute("parameters", both(hasEntry("foo", "")).and(hasEntry("bar", ""))),
+            model().attribute("result", "template , "))
   }
 
   @Test
@@ -38,17 +30,19 @@ class ControllerTest : IntegrationTest() {
     mockMvc
         .perform(
             post("/freemarker")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    """
-                    { "template": "template ${"$"}{foo}, ${"$"}{bar!''}"
-                    , "parameters": { "foo": "foo", "bar": "bar"}
-                    }"""))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .formFields(
+                    MultiValueMap.fromSingleValue(
+                        mapOf(
+                            "template" to "template ${"$"}{foo}, ${"$"}{bar!''}",
+                            "foo" to "foo",
+                            "bar" to "bar"))))
         .andExpectAll(
             status().isOk(),
-            content().contentType(MediaType.APPLICATION_JSON),
-            jsonPath("$.template", `is`("template foo, bar")),
-            jsonPath("$.parameters", hasItems("foo", "bar")))
+            model().attribute("template", "freemarker"),
+            model()
+                .attribute("parameters", both(hasEntry("foo", "foo")).and(hasEntry("bar", "bar"))),
+            model().attribute("result", "template foo, bar"))
   }
 
   @Test
@@ -56,8 +50,8 @@ class ControllerTest : IntegrationTest() {
     mockMvc
         .perform(
             post("/freemarker")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"template": "template ${"$"}{olo" }"""))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .formField("template", "template ${"$"}{olo"))
         .andExpect(status().isBadRequest())
   }
 }

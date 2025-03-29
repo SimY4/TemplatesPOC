@@ -10,34 +10,34 @@
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><strong>Template POC</strong></li>
-      </ul>
-      <ul>
-        <li>
-          <a th:href="@{/freemarker}" th:classappend="${template == 'freemarker' ? 'contrast' : 'secondary'}"
-            >Freemarker</a
-          >
-        </li>
-        <li>
-          <a th:href="@{/handlebars}" th:classappend="${template == 'handlebars' ? 'contrast' : 'secondary'}"
-            >Handlebars</a
-          >
-        </li>
-        <li>
-          <a th:href="@{/mustache}" th:classappend="${template == 'mustache' ? 'contrast' : 'secondary'}">Mustache</a>
-        </li>
-        <li>
-          <a th:href="@{/pebble}" th:classappend="${template == 'pebble' ? 'contrast' : 'secondary'}">Pebble</a>
-        </li>
-        <li>
-          <a th:href="@{/velocity}" th:classappend="${template == 'velocity' ? 'contrast' : 'secondary'}">Velocity</a>
-        </li>
-      </ul>
-    </nav>
-
     <main class="container">
+      <nav>
+        <ul>
+          <li><strong>Template POC</strong></li>
+        </ul>
+        <ul>
+          <li>
+            <a th:href="@{/freemarker}" th:classappend="${template == 'freemarker' ? 'contrast' : 'secondary'}"
+              >Freemarker</a
+            >
+          </li>
+          <li>
+            <a th:href="@{/handlebars}" th:classappend="${template == 'handlebars' ? 'contrast' : 'secondary'}"
+              >Handlebars</a
+            >
+          </li>
+          <li>
+            <a th:href="@{/mustache}" th:classappend="${template == 'mustache' ? 'contrast' : 'secondary'}">Mustache</a>
+          </li>
+          <li>
+            <a th:href="@{/pebble}" th:classappend="${template == 'pebble' ? 'contrast' : 'secondary'}">Pebble</a>
+          </li>
+          <li>
+            <a th:href="@{/velocity}" th:classappend="${template == 'velocity' ? 'contrast' : 'secondary'}">Velocity</a>
+          </li>
+        </ul>
+      </nav>
+
       <article>
         <form method="post">
           <fieldset class="grid">
@@ -51,7 +51,7 @@
               hx-target="#result"
               required
             ></textarea>
-            <div id="result" th:insert="~{result}" class="grid"></div>
+            <div id="result" th:insert="~{result}" class="grid" style="display: contents"></div>
           </fieldset>
         </form>
       </article>

@@ -30,7 +30,7 @@
     <velocity.version>2.4.1</velocity.version>
     <velocity-tools.version>3.1</velocity-tools.version>
 
-    <spotless.version>2.44.3</spotless.version>
+    <spotless.version>2.44.4</spotless.version>
 
     <docker-maven-plugin.version>0.45.1</docker-maven-plugin.version>
   </properties>

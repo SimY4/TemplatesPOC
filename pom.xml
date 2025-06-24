@@ -20,8 +20,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>21</java.version>
     <kotlin.version>2.2.0</kotlin.version>
-    <kotlin.compiler.languageVersion>2.1</kotlin.compiler.languageVersion>
+    <kotlin.compiler.languageVersion>2.2</kotlin.compiler.languageVersion>
     <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
 
     <handlebars.version>4.4.0</handlebars.version>
@@ -139,7 +140,7 @@
         <version>${kotlin.version}</version>
         <configuration>
           <args>
-            <arg>-Xjsr305=strict</arg>
+            <arg>-Xjspecify-annotations=strict</arg>
           </args>
         </configuration>
         <executions>

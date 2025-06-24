@@ -34,23 +34,21 @@ open class Controller(private val mustache: MustacheFactory) {
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     val template =
         StringReader(parametersMap["template"] ?: "").use { mustache.compile(it, TEMPLATE_NAME) }
-    val parameters = template.codes.parameters()
+    val parameters =
+        template.codes?.parameters()?.associateWith { parametersMap[it] ?: "" } ?: emptyMap()
     return StringWriter().use {
-      template.execute(it, parametersMap - setOf("template", "result"))
+      template.execute(it, parameters)
       model.addAttribute("template", "mustache")
       val modelMap = ModelMap()
-      parameters.forEach { modelMap.addAttribute(it, "") }
-      modelMap.addAllAttributes(parametersMap.filterKeys(parameters::contains))
+      modelMap.addAllAttributes(parameters)
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
       "result"
     }
   }
 
-  private fun Array<Code>?.parameters(): Set<String> =
-      this?.let { arr ->
-        arr.mapNotNull { it.name }.toSet() + arr.flatMap { it.codes.parameters() }
-      } ?: emptySet()
+  private fun Array<Code>.parameters(): Set<String> =
+      mapNotNull { it.name }.toSet() + flatMap { it.codes?.parameters() ?: emptySet() }
 
   @ExceptionHandler(MustacheException::class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)

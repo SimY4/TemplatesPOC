@@ -38,13 +38,12 @@ open class Controller(
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     stringTemplateLoader.putTemplate(TEMPLATE_NAME, parametersMap["template"] ?: "")
     val template = freemarkerConfiguration.getTemplate(TEMPLATE_NAME)
-    val parameters = templateTool.referenceSet(template)
+    val parameters = templateTool.referenceSet(template).associateWith { parametersMap[it] ?: "" }
     return StringWriter().use {
-      template.process(parametersMap - setOf("template", "result"), it)
+      template.process(parameters, it)
       model.addAttribute("template", "freemarker")
       val modelMap = ModelMap()
-      parameters.forEach { modelMap.addAttribute(it, "") }
-      modelMap.addAllAttributes(parametersMap.filterKeys(parameters::contains))
+      modelMap.addAllAttributes(parameters)
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
       "result"

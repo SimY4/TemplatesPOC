@@ -36,13 +36,12 @@ open class Controller(
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     memoryLoader.set(parametersMap["template"] ?: "")
     val template = pebbleEngine.getTemplate(TEMPLATE_NAME)
-    val parameters = templateTool.referenceSet(template)
+    val parameters = templateTool.referenceSet(template).associateWith { parametersMap[it] ?: "" }
     return StringWriter().use {
-      template.evaluate(it, parametersMap - setOf("template", "result"))
+      template.evaluate(it, parameters)
       model.addAttribute("template", "pebble")
       val modelMap = ModelMap()
-      parameters.forEach { modelMap.addAttribute(it, "") }
-      modelMap.addAllAttributes(parametersMap.filterKeys(parameters::contains))
+      modelMap.addAllAttributes(parameters)
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
       "result"

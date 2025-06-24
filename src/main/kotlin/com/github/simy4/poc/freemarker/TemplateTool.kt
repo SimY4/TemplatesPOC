@@ -1,6 +1,6 @@
 package com.github.simy4.poc.freemarker
 
-import freemarker.ext.beans.StringModel
+import freemarker.ext.beans.GenericObjectModel
 import freemarker.template.Template
 import freemarker.template.TemplateModelException
 import org.springframework.stereotype.Service
@@ -17,7 +17,7 @@ class TemplateTool {
             .mapNotNull { i ->
               rootTreeNode.childNodes[i].let { templateModel ->
                 when (templateModel) {
-                  is StringModel -> processStringModel(templateModel)
+                  is GenericObjectModel -> processStringModel(templateModel)
                   else -> null
                 }
               }
@@ -25,8 +25,8 @@ class TemplateTool {
             .toSet()
       }
 
-  private fun processStringModel(stringModel: StringModel): String? =
-      stringModel.wrappedObject.let { wrappedObject ->
+  private fun processStringModel(objectModel: GenericObjectModel): String? =
+      objectModel.wrappedObject.let { wrappedObject ->
         when (wrappedObject.javaClass.simpleName) {
           "DollarVariable" -> processDollarVariable(wrappedObject)
           else -> null

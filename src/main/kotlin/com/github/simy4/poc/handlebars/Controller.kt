@@ -29,15 +29,14 @@ open class Controller(private val handlebars: Handlebars) {
   @Throws(IOException::class)
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     val template = handlebars.compileInline(parametersMap["template"] ?: "")
-    val context = Context.newContext(parametersMap - setOf("template", "result"))
-    val parameters =
+    val variables =
         template.collect(TagType.VAR, TagType.STAR_VAR, TagType.AMP_VAR, TagType.TRIPLE_VAR).toSet()
+    val parameters = variables.associateWith { parametersMap[it] ?: "" }
     return StringWriter().use {
-      template.apply(context, it)
+      template.apply(Context.newContext(parameters), it)
       model.addAttribute("template", "handlebars")
       val modelMap = ModelMap()
-      parameters.forEach { modelMap.addAttribute(it, "") }
-      modelMap.addAllAttributes(parametersMap.filterKeys(parameters::contains))
+      modelMap.addAllAttributes(parameters)
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
       "result"

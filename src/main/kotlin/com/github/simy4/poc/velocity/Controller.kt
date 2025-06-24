@@ -38,15 +38,16 @@ open class Controller(
     StringResourceLoader.getRepository()
         .putStringResource(TEMPLATE_NAME, parametersMap["template"] ?: "", "UTF-8")
     val template = velocityEngine.getTemplate(TEMPLATE_NAME, "UTF-8")
-    val toolContext = toolManager.createContext()
-    toolContext.putAll(parametersMap - setOf("template", "result"))
     val parameters = templateTool.referenceSet(template)
+    val toolContext = toolManager.createContext()
+    parameters.forEach { parameter ->
+      parametersMap[parameter]?.let { toolContext.put(parameter, it) }
+    }
     return StringWriter().use {
       template.merge(toolContext, it)
       model.addAttribute("template", "velocity")
       val modelMap = ModelMap()
-      parameters.forEach { modelMap.addAttribute(it, "") }
-      modelMap.addAllAttributes(parametersMap.filterKeys(parameters::contains))
+      parameters.forEach { modelMap.addAttribute(it, parametersMap[it] ?: "") }
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
       "result"

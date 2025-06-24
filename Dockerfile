@@ -7,8 +7,8 @@ RUN java -Djarmode=layertools -jar application.jar extract
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
 COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder application/spring-boot-loader/ ./
 COPY --from=builder application/application/ ./
 
 EXPOSE 9000

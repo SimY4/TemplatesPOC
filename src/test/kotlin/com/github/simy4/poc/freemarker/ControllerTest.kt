@@ -17,12 +17,14 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template ${"$"}{foo}, ${"$"}{bar!''}"))
+                .formField("template", "template ${"$"}{foo}, ${"$"}{bar!''}")
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "freemarker"),
             model().attribute("parameters", both(hasEntry("foo", "")).and(hasEntry("bar", ""))),
-            model().attribute("result", "template , "))
+            model().attribute("result", "template , "),
+        )
   }
 
   @Test
@@ -36,13 +38,18 @@ class ControllerTest : IntegrationTest() {
                         mapOf(
                             "template" to "template ${"$"}{foo}, ${"$"}{bar!''}",
                             "foo" to "foo",
-                            "bar" to "bar"))))
+                            "bar" to "bar",
+                        )
+                    )
+                )
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "freemarker"),
             model()
                 .attribute("parameters", both(hasEntry("foo", "foo")).and(hasEntry("bar", "bar"))),
-            model().attribute("result", "template foo, bar"))
+            model().attribute("result", "template foo, bar"),
+        )
   }
 
   @Test
@@ -51,7 +58,8 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template ${"$"}{olo"))
+                .formField("template", "template ${"$"}{olo")
+        )
         .andExpect(status().isBadRequest())
   }
 }

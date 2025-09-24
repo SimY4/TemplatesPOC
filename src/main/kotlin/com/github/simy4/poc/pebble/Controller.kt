@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 open class Controller(
     private val memoryLoader: MemoryLoader,
     private val pebbleEngine: PebbleEngine,
-    private val templateTool: TemplateTool
+    private val templateTool: TemplateTool,
 ) {
 
   companion object {
@@ -31,7 +31,8 @@ open class Controller(
   @Timed("pebble.template.update")
   @PostMapping(
       produces = [MediaType.TEXT_HTML_VALUE],
-      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE],
+  )
   @Throws(IOException::class)
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     memoryLoader.set(parametersMap["template"] ?: "")

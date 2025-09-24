@@ -25,7 +25,8 @@ open class Controller(private val handlebars: Handlebars) {
   @Timed("handlebars.template.update")
   @PostMapping(
       produces = [MediaType.TEXT_HTML_VALUE],
-      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE],
+  )
   @Throws(IOException::class)
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     val template = handlebars.compileInline(parametersMap["template"] ?: "")

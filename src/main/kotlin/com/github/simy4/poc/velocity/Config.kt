@@ -14,13 +14,17 @@ open class Config {
         it.setProperty(Velocity.RUNTIME_LOG_NAME, "com.github.simy4.poc.velocity")
         it.setProperty(Velocity.RESOURCE_LOADERS, "string")
         it.setProperty(
-            Velocity.RESOURCE_LOADER + ".string.description", "Velocity StringResource loader")
+            Velocity.RESOURCE_LOADER + ".string.description",
+            "Velocity StringResource loader",
+        )
         it.setProperty(
             Velocity.RESOURCE_LOADER + ".string.class",
-            "org.apache.velocity.runtime.resource.loader.StringResourceLoader")
+            "org.apache.velocity.runtime.resource.loader.StringResourceLoader",
+        )
         it.setProperty(
             Velocity.RESOURCE_LOADER + ".string.repository.class",
-            "org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl")
+            "org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl",
+        )
       }
 
   @Bean open fun toolManager(): ToolManager = ToolManager(true)

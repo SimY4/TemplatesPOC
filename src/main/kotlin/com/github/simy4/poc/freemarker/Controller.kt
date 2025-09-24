@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 open class Controller(
     private val stringTemplateLoader: StringTemplateLoader,
     private val freemarkerConfiguration: Configuration,
-    private val templateTool: TemplateTool
+    private val templateTool: TemplateTool,
 ) {
 
   companion object {
@@ -33,7 +33,8 @@ open class Controller(
   @Timed("freemarker.template.update")
   @PostMapping(
       produces = [MediaType.TEXT_HTML_VALUE],
-      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE],
+  )
   @Throws(IOException::class, TemplateException::class)
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     stringTemplateLoader.putTemplate(TEMPLATE_NAME, parametersMap["template"] ?: "")

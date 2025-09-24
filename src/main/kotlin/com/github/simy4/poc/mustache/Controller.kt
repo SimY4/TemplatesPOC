@@ -29,7 +29,8 @@ open class Controller(private val mustache: MustacheFactory) {
   @Timed("mustache.template.update")
   @PostMapping(
       produces = [MediaType.TEXT_HTML_VALUE],
-      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE],
+  )
   @Throws(IOException::class)
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     val template =

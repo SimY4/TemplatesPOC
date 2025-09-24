@@ -42,10 +42,8 @@ class TemplateTool {
           "BuiltinVariable" -> null
           else ->
               throw IllegalStateException(
-                  "Unable to introspect variable " +
-                      expression +
-                      " of type " +
-                      expression.javaClass)
+                  "Unable to introspect variable " + expression + " of type " + expression.javaClass
+              )
         }
       }
 

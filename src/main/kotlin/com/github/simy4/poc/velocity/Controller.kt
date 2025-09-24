@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 open class Controller(
     private val velocityEngine: VelocityEngine,
     private val toolManager: ToolManager,
-    private val templateTool: TemplateTool
+    private val templateTool: TemplateTool,
 ) {
 
   companion object {
@@ -33,7 +33,8 @@ open class Controller(
   @Timed("velocity.template.update")
   @PostMapping(
       produces = [MediaType.TEXT_HTML_VALUE],
-      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+      consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE],
+  )
   open fun updateTemplate(@RequestParam parametersMap: Map<String, String>, model: Model): String {
     StringResourceLoader.getRepository()
         .putStringResource(TEMPLATE_NAME, parametersMap["template"] ?: "", "UTF-8")

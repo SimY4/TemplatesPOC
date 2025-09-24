@@ -16,12 +16,14 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/pebble")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template {{foo}}"))
+                .formField("template", "template {{foo}}")
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "pebble"),
             model().attribute("parameters", hasEntry("foo", "")),
-            model().attribute("result", "template "))
+            model().attribute("result", "template "),
+        )
   }
 
   @Test
@@ -32,12 +34,16 @@ class ControllerTest : IntegrationTest() {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formFields(
                     MultiValueMap.fromSingleValue(
-                        mapOf("template" to "template {{foo}}", "foo" to "foo"))))
+                        mapOf("template" to "template {{foo}}", "foo" to "foo")
+                    )
+                )
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "pebble"),
             model().attribute("parameters", hasEntry("foo", "foo")),
-            model().attribute("result", "template foo"))
+            model().attribute("result", "template foo"),
+        )
   }
 
   @Test
@@ -46,7 +52,8 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/pebble")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template {{foo"))
+                .formField("template", "template {{foo")
+        )
         .andExpect(status().isBadRequest())
   }
 }

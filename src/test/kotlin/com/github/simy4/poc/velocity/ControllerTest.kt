@@ -18,12 +18,14 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/velocity")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template ${"$"}foo, $!bar, ${"$"}{foo}, $!{bar}"))
+                .formField("template", "template ${"$"}foo, $!bar, ${"$"}{foo}, $!{bar}")
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "velocity"),
             model().attribute("parameters", both(hasEntry("foo", "")).and(hasEntry("bar", ""))),
-            model().attribute("result", "template \$foo, , \${foo}, "))
+            model().attribute("result", "template \$foo, , \${foo}, "),
+        )
   }
 
   @Test
@@ -37,13 +39,18 @@ class ControllerTest : IntegrationTest() {
                         mapOf(
                             "template" to "template ${"$"}foo, \$!bar, ${"$"}{foo}, \$!{bar}",
                             "foo" to "foo",
-                            "bar" to "bar"))))
+                            "bar" to "bar",
+                        )
+                    )
+                )
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "velocity"),
             model()
                 .attribute("parameters", both(hasEntry("foo", "foo")).and(hasEntry("bar", "bar"))),
-            model().attribute("result", "template foo, bar, foo, bar"))
+            model().attribute("result", "template foo, bar, foo, bar"),
+        )
   }
 
   @Test
@@ -52,12 +59,14 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/velocity")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template #set(${"$"}foo = 'test')"))
+                .formField("template", "template #set(${"$"}foo = 'test')")
+        )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "velocity"),
             model().attribute("parameters", anEmptyMap<Any, Any>()),
-            model().attribute("result", "template "))
+            model().attribute("result", "template "),
+        )
   }
 
   @Test
@@ -66,7 +75,8 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/velocity")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template ${"$"}{foo"))
+                .formField("template", "template ${"$"}{foo")
+        )
         .andExpect(status().isBadRequest())
   }
 }

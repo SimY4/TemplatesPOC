@@ -51,7 +51,7 @@ open class Controller(
       parameters.forEach { modelMap.addAttribute(it, parametersMap[it] ?: "") }
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
-      "result"
+      "index :: result"
     }
   }
 

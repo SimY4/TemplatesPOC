@@ -7,7 +7,7 @@
     <title>Template POC</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
   </head>
   <body>
     <main class="container">
@@ -51,7 +51,25 @@
               hx-target="#result"
               required
             ></textarea>
-            <div id="result" th:insert="~{result}" style="display: contents"></div>
+            <div id="result" th:fragment="result" style="display: contents" hx-swap-oob="true">
+              <fieldset th:if="${!parameters.isEmpty()}">
+                <label th:each="parameter: ${parameters}">
+                  [(${parameter.key})]:
+                  <input
+                          type="text"
+                          th:name="${parameter.key}"
+                          th:hx-post="@{/{template}(template=${template})}"
+                          hx-trigger="keyup changed delay:500ms"
+                          hx-target="#result"
+                          placeholder="Parameter value"
+                          aria-label="Text"
+                          th:value="${parameter.value}"
+                  />
+                </label>
+              </fieldset>
+              <div th:if="${parameters.isEmpty()}">No parameters in template</div>
+              <textarea name="result" rows="20" readonly>[(${result})]</textarea>
+            </div>
           </fieldset>
         </form>
       </article>

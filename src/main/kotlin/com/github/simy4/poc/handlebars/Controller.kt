@@ -40,7 +40,7 @@ open class Controller(private val handlebars: Handlebars) {
       modelMap.addAllAttributes(parameters)
       model.addAttribute("parameters", modelMap)
       model.addAttribute("result", it.toString())
-      "result"
+      "index :: result"
     }
   }
 

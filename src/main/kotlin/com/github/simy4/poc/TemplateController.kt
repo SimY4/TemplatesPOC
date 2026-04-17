@@ -1,6 +1,7 @@
 package com.github.simy4.poc
 
 import io.micrometer.core.annotation.Timed
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
@@ -28,6 +29,7 @@ open class TemplateController(
   @GetMapping("/{${TEMPLATE}:${PATH_PATTERN}}", produces = [MediaType.TEXT_HTML_VALUE])
   open fun template(@PathVariable(TEMPLATE) template: String, model: Model): String {
     model.addAttribute(TEMPLATE, template)
+    model.addAttribute("templates", PATH_PATTERN.split('|'))
     model.addAttribute("parameters", ModelMap())
     model.addAttribute("result", "")
     return "index"
@@ -43,6 +45,7 @@ open class TemplateController(
       @PathVariable(TEMPLATE) template: String,
       @RequestParam parametersMap: Map<String, String>,
       model: Model,
+      response: HttpServletResponse,
   ): String =
       runCatching {
             val templateInput = parametersMap[TEMPLATE] ?: ""
@@ -59,6 +62,7 @@ open class TemplateController(
               },
               onFailure = { t ->
                 model.addAttribute("error", t.message)
+                response.addHeader("HX-Retarget", "#error")
                 return "index :: error"
               },
           )

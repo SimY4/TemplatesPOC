@@ -16,24 +16,10 @@
           <li><strong>Template POC</strong></li>
         </ul>
         <ul>
-          <li>
-            <a th:href="@{/freemarker}" th:classappend="${template == 'freemarker' ? 'contrast' : 'secondary'}"
-              >Freemarker</a
+          <li th:each="t: ${templates}">
+            <a th:href="@{/{template}(template=${t})}" th:classappend="${t == template ? 'contrast' : 'secondary'}"
+              >[(${#strings.capitalize(t)})]</a
             >
-          </li>
-          <li>
-            <a th:href="@{/handlebars}" th:classappend="${template == 'handlebars' ? 'contrast' : 'secondary'}"
-              >Handlebars</a
-            >
-          </li>
-          <li>
-            <a th:href="@{/mustache}" th:classappend="${template == 'mustache' ? 'contrast' : 'secondary'}">Mustache</a>
-          </li>
-          <li>
-            <a th:href="@{/pebble}" th:classappend="${template == 'pebble' ? 'contrast' : 'secondary'}">Pebble</a>
-          </li>
-          <li>
-            <a th:href="@{/velocity}" th:classappend="${template == 'velocity' ? 'contrast' : 'secondary'}">Velocity</a>
           </li>
         </ul>
       </nav>
@@ -73,6 +59,11 @@
           </fieldset>
         </form>
       </article>
+      <div id="error" th:fragment="error" hx-swap-oob="true">
+        <div role="group" th:if="${error}">
+          <div role="button" class="outline secondary" aria-disabled="true" disabled><span>[(${error})]</span></div>
+        </div>
+      </div>
     </main>
   </body>
 </html>

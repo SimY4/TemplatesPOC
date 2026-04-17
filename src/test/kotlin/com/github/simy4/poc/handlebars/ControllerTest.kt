@@ -3,6 +3,7 @@ package com.github.simy4.poc.handlebars
 import com.github.simy4.poc.IntegrationTest
 import org.hamcrest.Matchers.both
 import org.hamcrest.Matchers.hasEntry
+import org.hamcrest.Matchers.stringContainsInOrder
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -60,6 +61,9 @@ class ControllerTest : IntegrationTest() {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formField("template", "template {{foo")
         )
-        .andExpect(status().isBadRequest())
+        .andExpectAll(
+            status().isOk(),
+            model().attribute("error", stringContainsInOrder("found", "expected")),
+        )
   }
 }

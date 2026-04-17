@@ -6,5 +6,5 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration("handlebarsConfig")
 open class Config {
-  @Bean open fun handlebars(): Handlebars = Handlebars()
+  @Bean open fun handlebarsTemplate(): Handlebars = Handlebars()
 }

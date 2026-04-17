@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration("mustacheConfig")
 open class Config {
-  @Bean open fun mustache(): MustacheFactory = DefaultMustacheFactory()
+  @Bean open fun mustacheFactory(): MustacheFactory = DefaultMustacheFactory()
 }

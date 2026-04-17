@@ -1,6 +1,7 @@
 package com.github.simy4.poc.pebble
 
 import com.github.simy4.poc.IntegrationTest
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.hasEntry
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
@@ -54,6 +55,9 @@ class ControllerTest : IntegrationTest() {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formField("template", "template {{foo")
         )
-        .andExpect(status().isBadRequest())
+        .andExpectAll(
+            status().isOk(),
+            model().attribute("error", containsString("Unexpected token")),
+        )
   }
 }

@@ -60,6 +60,9 @@ class ControllerTest : IntegrationTest() {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formField("template", "template {{foo")
         )
-        .andExpect(status().isBadRequest())
+        .andExpectAll(
+            status().isOk(),
+            model().attribute("error", "Improperly closed variable @[template:1]"),
+        )
   }
 }

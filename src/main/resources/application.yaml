@@ -1,14 +1,6 @@
 spring:
   application.name: @project.name@
   threads.virtual.enabled: true
-  thymeleaf:
-    cache: false
-    encoding: UTF-8
-    prefix: file:src/main/resources/templates/
-  resourcse:
-    cache:
-      period: 0
-    static-locations: file:src/main/resources/static/
 
 server:
   port: 9000
@@ -23,3 +15,15 @@ logging:
     freemarker: WARN
 
 management.server.port: 9001
+
+---
+spring:
+  config.activate.on-profile: local
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+  web:
+    resources:
+      cache:
+        period: 0
+      static-locations: file:src/main/resources/static/

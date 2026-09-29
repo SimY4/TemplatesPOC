@@ -46,24 +46,23 @@ open class TemplateController(
       @RequestParam parametersMap: Map<String, String>,
       model: Model,
       response: HttpServletResponse,
-  ): String =
-      runCatching {
-            val templateInput = parametersMap[TEMPLATE] ?: ""
-            renderers[template]!!.render(templateInput, parametersMap - TEMPLATE)
-          }
-          .fold(
-              onSuccess = { result ->
-                model.addAttribute(TEMPLATE, template)
-                val modelMap = ModelMap()
-                modelMap.addAllAttributes(result.parameters)
-                model.addAttribute("parameters", modelMap)
-                model.addAttribute("result", result.template)
-                return "index :: result"
-              },
-              onFailure = { t ->
-                model.addAttribute("error", t.message)
-                response.addHeader("HX-Retarget", "#error")
-                return "index :: error"
-              },
-          )
+  ): String = runCatching {
+    val templateInput = parametersMap[TEMPLATE] ?: ""
+    renderers[template]!!.render(templateInput, parametersMap - TEMPLATE)
+  }
+      .fold(
+          onSuccess = { result ->
+            model.addAttribute(TEMPLATE, template)
+            val modelMap = ModelMap()
+            modelMap.addAllAttributes(result.parameters)
+            model.addAttribute("parameters", modelMap)
+            model.addAttribute("result", result.template)
+            return "index :: result"
+          },
+          onFailure = { t ->
+            model.addAttribute("error", t.message)
+            response.addHeader("HX-Retarget", "#error")
+            return "index :: error"
+          },
+      )
 }

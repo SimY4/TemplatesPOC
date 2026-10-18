@@ -17,7 +17,7 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/pebble")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template {{foo}}")
+                .formField("template", "template {{foo}}"),
         )
         .andExpectAll(
             status().isOk(),
@@ -35,9 +35,9 @@ class ControllerTest : IntegrationTest() {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formFields(
                     MultiValueMap.fromSingleValue(
-                        mapOf("template" to "template {{foo}}", "foo" to "foo")
-                    )
-                )
+                        mapOf("template" to "template {{foo}}", "foo" to "foo"),
+                    ),
+                ),
         )
         .andExpectAll(
             status().isOk(),
@@ -51,9 +51,7 @@ class ControllerTest : IntegrationTest() {
   fun testUpdateTemplateBadTemplate() {
     mockMvc
         .perform(
-            post("/pebble")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template {{foo")
+            post("/pebble").contentType(MediaType.APPLICATION_FORM_URLENCODED).formField("template", "template {{foo"),
         )
         .andExpectAll(
             status().isOk(),

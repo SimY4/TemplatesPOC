@@ -192,7 +192,12 @@
               <include>src/test/kotlin/**/*.kt</include>
               <include>src/it/kotlin/**/*.kt</include>
             </includes>
-            <ktfmt/>
+            <ktfmt>
+              <maxWidth>120</maxWidth>
+              <blockIndent>2</blockIndent>
+              <continuationIndent>4</continuationIndent>
+              <removeUnusedImports>true</removeUnusedImports>
+            </ktfmt>
           </kotlin>
         </configuration>
         <executions>

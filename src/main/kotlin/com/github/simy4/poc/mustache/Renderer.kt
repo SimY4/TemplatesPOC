@@ -18,8 +18,7 @@ open class Renderer(private val mustache: MustacheFactory) : TemplateRenderer {
       parameters: Map<String, String>,
   ): TemplateRenderer.Result {
     val template = StringReader(template).use { mustache.compile(it, TEMPLATE_NAME) }
-    val parameters =
-        template.codes?.parameters()?.associateWith { parameters[it] ?: "" } ?: emptyMap()
+    val parameters = template.codes?.parameters()?.associateWith { parameters[it] ?: "" } ?: emptyMap()
     return StringWriter().use {
       template.execute(it, parameters)
       TemplateRenderer.Result(it.toString(), parameters)

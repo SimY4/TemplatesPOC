@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-open class TemplateController(
-    @param:Autowired private val renderers: Map<String, TemplateRenderer>
-) {
+open class TemplateController(@param:Autowired private val renderers: Map<String, TemplateRenderer>) {
   companion object {
     private const val PATH_PATTERN = "freemarker|handlebars|mustache|pebble|velocity"
     private const val TEMPLATE = "template"

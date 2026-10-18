@@ -21,8 +21,7 @@ class TemplateTool {
               is UnaryExpression -> go(node.childExpression)
               is PrintNode -> go(node.expression)
               is BinaryExpression<*> -> go(node.leftExpression) + go(node.rightExpression)
-              is TernaryExpression ->
-                  listOf(node.expression1, node.expression2, node.expression3).flatMap { go(it) }
+              is TernaryExpression -> listOf(node.expression1, node.expression2, node.expression3).flatMap { go(it) }
               else -> emptyList()
             }
 

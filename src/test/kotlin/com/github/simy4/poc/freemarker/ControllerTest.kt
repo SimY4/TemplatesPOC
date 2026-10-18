@@ -18,7 +18,7 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template ${"$"}{foo}, ${"$"}{bar!''}")
+                .formField("template", "template ${"$"}{foo}, ${"$"}{bar!''}"),
         )
         .andExpectAll(
             status().isOk(),
@@ -40,15 +40,14 @@ class ControllerTest : IntegrationTest() {
                             "template" to "template ${"$"}{foo}, ${"$"}{bar!''}",
                             "foo" to "foo",
                             "bar" to "bar",
-                        )
-                    )
-                )
+                        ),
+                    ),
+                ),
         )
         .andExpectAll(
             status().isOk(),
             model().attribute("template", "freemarker"),
-            model()
-                .attribute("parameters", both(hasEntry("foo", "foo")).and(hasEntry("bar", "bar"))),
+            model().attribute("parameters", both(hasEntry("foo", "foo")).and(hasEntry("bar", "bar"))),
             model().attribute("result", "template foo, bar"),
         )
   }
@@ -59,7 +58,7 @@ class ControllerTest : IntegrationTest() {
         .perform(
             post("/freemarker")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formField("template", "template ${"$"}{olo")
+                .formField("template", "template ${"$"}{olo"),
         )
         .andExpectAll(status().isOk(), model().attribute("error", containsString("Syntax error")))
   }

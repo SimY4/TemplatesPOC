@@ -16,11 +16,9 @@ class TemplateTool(toolManager: ToolManager) {
 
   @Suppress("UNCHECKED_CAST")
   fun referenceSet(template: Template): Set<String> =
-      (template.data as Node).jjtAccept(ReferenceNodeVisitor(toolClassMap), mutableSetOf<String>())
-          as Set<String>
+      (template.data as Node).jjtAccept(ReferenceNodeVisitor(toolClassMap), mutableSetOf<String>()) as Set<String>
 
-  private class ReferenceNodeVisitor(private val toolClassMap: Map<String, Class<*>>) :
-      BaseVisitor() {
+  private class ReferenceNodeVisitor(private val toolClassMap: Map<String, Class<*>>) : BaseVisitor() {
     private val localReferences: MutableSet<String> = hashSetOf()
 
     override fun visit(node: ASTSetDirective, referenceSet: Any): Any {
